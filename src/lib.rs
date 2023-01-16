@@ -3,9 +3,10 @@ use crate::response::ShodanClientResponse;
 use std::collections::HashMap;
 use url::Url;
 
+pub mod response;
 pub mod account;
 pub mod api_status;
-pub mod response;
+pub mod utility;
 
 const BASE_API_URL: &'static str = "https://api.shodan.io";
 

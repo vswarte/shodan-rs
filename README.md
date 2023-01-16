@@ -53,8 +53,8 @@ You can review the support table below.
 | REST  | DNS          | GET    | /dns/domain/{domain}                                  | :white_large_square: |
 | REST  | DNS          | GET    | /dns/resolve                                          | :white_large_square: |
 | REST  | DNS          | GET    | /dns/reverse                                          | :white_large_square: |
-| REST  | Utility      | GET    | /tools/httpheaders                                    | :white_large_square: |
-| REST  | Utility      | GET    | /tools/myip                                           | :white_large_square: |
+| REST  | Utility      | GET    | /tools/httpheaders                                    |  :white_check_mark:  |
+| REST  | Utility      | GET    | /tools/myip                                           |  :white_check_mark:  |
 | REST  | API Status   | GET    | /api-info                                             |  :white_check_mark:  |
 
 ## Example usage
