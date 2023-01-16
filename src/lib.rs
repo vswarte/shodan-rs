@@ -1,13 +1,13 @@
-use serde::Deserialize;
 use crate::response::ShodanClientResponse;
+use serde::Deserialize;
 use std::collections::HashMap;
 use url::Url;
 
-pub mod response;
 pub mod account;
 pub mod api_status;
-pub mod utility;
 pub mod dns;
+pub mod response;
+pub mod utility;
 
 const BASE_API_URL: &'static str = "https://api.shodan.io";
 
@@ -38,7 +38,9 @@ impl ShodanClient {
         return url.to_string();
     }
 
-    fn fetch<T: for<'a> Deserialize<'a>>(url: String) -> Result<ShodanClientResponse<T>, reqwest::Error> {
+    fn fetch<T: for<'a> Deserialize<'a>>(
+        url: String,
+    ) -> Result<ShodanClientResponse<T>, reqwest::Error> {
         Ok(reqwest::blocking::get(url)?.json::<ShodanClientResponse<T>>()?)
     }
 }
