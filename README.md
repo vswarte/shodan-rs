@@ -8,8 +8,8 @@ This client does not support the entire API as I only have an account with a `de
 You can review the support table below.
 
 ### API support
-| Realm | API          | VERB   | Endpoint                                              | Support              |
-|-------|--------------|--------|-------------------------------------------------------|----------------------|
+| Realm | API          | VERB   | Endpoint                                              |       Support        |
+|-------|--------------|--------|-------------------------------------------------------|:--------------------:|
 | REST  | Search       | GET    | /shodan/host/ip/                                      | :white_large_square: |
 | REST  | Search       | GET    | /shodan/host/count/                                   | :white_large_square: |
 | REST  | Search       | GET    | /shodan/host/search/                                  | :white_large_square: |
@@ -49,13 +49,13 @@ You can review the support table below.
 | REST  | Organization | GET    | /org                                                  | :white_large_square: |
 | REST  | Organization | PUT    | /org/member/{user}                                    | :white_large_square: |
 | REST  | Organization | DELETE | /org/member/{user}                                    | :white_large_square: |
-| REST  | Account      | GET    | /account/profile                                      | :white_large_square: |
+| REST  | Account      | GET    | /account/profile                                      |  :white_check_mark:  |
 | REST  | DNS          | GET    | /dns/domain/{domain}                                  | :white_large_square: |
 | REST  | DNS          | GET    | /dns/resolve                                          | :white_large_square: |
 | REST  | DNS          | GET    | /dns/reverse                                          | :white_large_square: |
 | REST  | Utility      | GET    | /tools/httpheaders                                    | :white_large_square: |
 | REST  | Utility      | GET    | /tools/myip                                           | :white_large_square: |
-| REST  | API Status   | GET    | /api-info                                             | :white_large_square: |
+| REST  | API Status   | GET    | /api-info                                             |  :white_check_mark:  |
 
 ## Example usage
 
