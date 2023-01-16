@@ -50,9 +50,9 @@ You can review the support table below.
 | REST  | Organization | PUT    | /org/member/{user}                                    | :white_large_square: |
 | REST  | Organization | DELETE | /org/member/{user}                                    | :white_large_square: |
 | REST  | Account      | GET    | /account/profile                                      |  :white_check_mark:  |
-| REST  | DNS          | GET    | /dns/domain/{domain}                                  | :white_large_square: |
-| REST  | DNS          | GET    | /dns/resolve                                          | :white_large_square: |
-| REST  | DNS          | GET    | /dns/reverse                                          | :white_large_square: |
+| REST  | DNS          | GET    | /dns/domain/{domain}                                  |  :white_check_mark:  |
+| REST  | DNS          | GET    | /dns/resolve                                          |  :white_check_mark:  |
+| REST  | DNS          | GET    | /dns/reverse                                          |  :white_check_mark:  |
 | REST  | Utility      | GET    | /tools/httpheaders                                    |  :white_check_mark:  |
 | REST  | Utility      | GET    | /tools/myip                                           |  :white_check_mark:  |
 | REST  | API Status   | GET    | /api-info                                             |  :white_check_mark:  |

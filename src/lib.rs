@@ -7,6 +7,7 @@ pub mod response;
 pub mod account;
 pub mod api_status;
 pub mod utility;
+pub mod dns;
 
 const BASE_API_URL: &'static str = "https://api.shodan.io";
 
