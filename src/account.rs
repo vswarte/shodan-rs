@@ -32,7 +32,7 @@ pub mod tests {
     use crate::ShodanClient;
 
     #[test]
-    fn can_request_account_profile() {
+    fn can_get_account_profile() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_account_profile().unwrap();
 

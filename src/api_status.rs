@@ -40,7 +40,7 @@ pub mod tests {
     use crate::ShodanClient;
 
     #[test]
-    fn can_request_api_info() {
+    fn can_get_api_info() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_api_info().unwrap();
 
