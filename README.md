@@ -1,6 +1,6 @@
 # Shodan-rs
 
-A shodan client written in rust (if that wasn't clear yet).
+A shodan client written in rust (if that wasn't clear yet). Heavily WIP so docs are TODO :-(
 
 ## API support
 The official shodan API documentation can be found [here](https://developer.shodan.io/api).
@@ -56,12 +56,3 @@ You can review the support table below.
 | REST  | Utility      | GET    | /tools/httpheaders                                    |  :white_check_mark:  |
 | REST  | Utility      | GET    | /tools/myip                                           |  :white_check_mark:  |
 | REST  | API Status   | GET    | /api-info                                             |  :white_check_mark:  |
-
-## Example usage
-
-### Fetching account info
-
-```rust
-let client = ShodanClient::new("YOUR-API-KEY");
-let response = client.get_account_profile().unwrap();
-```
