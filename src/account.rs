@@ -1,6 +1,6 @@
-use serde::{Deserialize};
-use crate::ShodanClient;
 use crate::response::ShodanClientResponse;
+use crate::ShodanClient;
+use serde::Deserialize;
 
 pub trait Account {
     fn get_account_profile(
@@ -22,8 +22,8 @@ impl Account for ShodanClient {
     ) -> Result<ShodanClientResponse<AccountProfileResponse>, reqwest::Error> {
         let url = self.build_request_url("/account/profile", None);
 
-        let res = reqwest::blocking::get(url)?
-            .json::<ShodanClientResponse<AccountProfileResponse>>()?;
+        let res =
+            reqwest::blocking::get(url)?.json::<ShodanClientResponse<AccountProfileResponse>>()?;
 
         Ok(res)
     }
@@ -31,16 +31,16 @@ impl Account for ShodanClient {
 
 #[cfg(test)]
 pub mod tests {
-    use crate::ShodanClient;
     use crate::account::Account;
+    use crate::response::ShodanClientResponse;
     use crate::tests::get_test_api_key;
-    use crate::response ::ShodanClientResponse;
+    use crate::ShodanClient;
 
     #[test]
     fn can_request_account_profile() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_account_profile().unwrap();
 
-        assert!(matches!(response, ShodanClientResponse::Response{ .. }));
+        assert!(matches!(response, ShodanClientResponse::Response { .. }));
     }
 }

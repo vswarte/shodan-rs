@@ -1,6 +1,6 @@
+use crate::response::ShodanClientResponse;
 use std::collections::HashMap;
 use url::Url;
-use crate::response::ShodanClientResponse;
 
 pub mod account;
 pub mod api_info;
