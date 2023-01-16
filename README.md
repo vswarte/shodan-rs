@@ -8,8 +8,8 @@ This client does not support the entire API as I only have an account with a `de
 You can review the support table below.
 
 ### API support
-| Realm | API          | VERB   | Endpoint                                              |       Support        |
-|-------|--------------|--------|-------------------------------------------------------|:--------------------:|
+| Realm | API          | Verb   | Endpoint                                              |       Support        |
+|:------|:-------------|:-------|:------------------------------------------------------|:--------------------:|
 | REST  | Search       | GET    | /shodan/host/ip/                                      | :white_large_square: |
 | REST  | Search       | GET    | /shodan/host/count/                                   | :white_large_square: |
 | REST  | Search       | GET    | /shodan/host/search/                                  | :white_large_square: |
