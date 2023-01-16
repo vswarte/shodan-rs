@@ -27,16 +27,20 @@ impl Account for ShodanClient {
 #[cfg(test)]
 pub mod tests {
     use crate::account::Account;
+    use crate::response::ShodanClientResponse;
     use crate::tests::get_test_api_key;
     use crate::ShodanClient;
 
     #[test]
     fn can_get_account_profile() {
         let client = ShodanClient::new(get_test_api_key());
-        let _response = client.get_account_profile().unwrap();
+        let response = client.get_account_profile().unwrap();
 
-        // This endpoint is heavily rate limited so we should be good as long as we're not getting
-        // reqwest errors.
-        //assert!(matches!(response, ShodanClientResponse::Response { .. }));
+        // This endpoint is heavily rate limited so we should be good with either
+        // response or API error
+        assert!(
+            matches!(response, ShodanClientResponse::Response { .. }) ||
+            matches!(response, ShodanClientResponse::Error { .. })
+        );
     }
 }
