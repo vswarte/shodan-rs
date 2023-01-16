@@ -39,8 +39,8 @@ pub mod tests {
         // This endpoint is heavily rate limited so we should be good with either
         // response or API error
         assert!(
-            matches!(response, ShodanClientResponse::Response { .. }) ||
-            matches!(response, ShodanClientResponse::Error { .. })
+            matches!(response, ShodanClientResponse::Response { .. })
+                || matches!(response, ShodanClientResponse::Error { .. })
         );
     }
 }

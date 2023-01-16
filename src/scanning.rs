@@ -4,7 +4,9 @@ use std::collections::HashMap;
 
 trait Scanning {
     fn get_scanning_ports(&self) -> Result<ShodanClientResponse<Vec<u16>>, reqwest::Error>;
-    fn get_scanning_protocols(&self) -> Result<ShodanClientResponse<HashMap<String, String>>, reqwest::Error>;
+    fn get_scanning_protocols(
+        &self,
+    ) -> Result<ShodanClientResponse<HashMap<String, String>>, reqwest::Error>;
 }
 
 impl Scanning for ShodanClient {
@@ -12,7 +14,9 @@ impl Scanning for ShodanClient {
         Self::fetch(self.build_request_url("/shodan/ports", None))
     }
 
-    fn get_scanning_protocols(&self) -> Result<ShodanClientResponse<HashMap<String, String>>, reqwest::Error> {
+    fn get_scanning_protocols(
+        &self,
+    ) -> Result<ShodanClientResponse<HashMap<String, String>>, reqwest::Error> {
         Self::fetch(self.build_request_url("/shodan/protocols", None))
     }
 }
@@ -20,8 +24,8 @@ impl Scanning for ShodanClient {
 #[cfg(test)]
 pub mod tests {
     use crate::response::ShodanClientResponse;
-    use crate::tests::get_test_api_key;
     use crate::scanning::Scanning;
+    use crate::tests::get_test_api_key;
     use crate::ShodanClient;
 
     #[test]

@@ -5,10 +5,11 @@ use url::Url;
 
 pub mod account;
 pub mod api_status;
+pub mod directory;
 pub mod dns;
 pub mod response;
-pub mod utility;
 pub mod scanning;
+pub mod utility;
 
 const BASE_API_URL: &'static str = "https://api.shodan.io";
 

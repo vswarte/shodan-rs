@@ -26,10 +26,12 @@ trait Dns {
         &self,
         domain: String,
     ) -> Result<ShodanClientResponse<DnsDomainResponse>, reqwest::Error>;
+
     fn get_dns_resolve(
         &self,
         hostnames: Vec<String>,
     ) -> Result<ShodanClientResponse<HashMap<String, Option<String>>>, reqwest::Error>;
+
     fn get_dns_reverse(
         &self,
         ips: Vec<String>,
