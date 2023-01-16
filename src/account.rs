@@ -20,12 +20,7 @@ impl Account for ShodanClient {
     fn get_account_profile(
         &self,
     ) -> Result<ShodanClientResponse<AccountProfileResponse>, reqwest::Error> {
-        let url = self.build_request_url("/account/profile", None);
-
-        let res =
-            reqwest::blocking::get(url)?.json::<ShodanClientResponse<AccountProfileResponse>>()?;
-
-        Ok(res)
+        Self::fetch(self.build_request_url("/account/profile", None))
     }
 }
 

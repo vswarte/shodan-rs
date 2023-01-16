@@ -28,11 +28,7 @@ trait ApiInfo {
 
 impl ApiInfo for ShodanClient {
     fn get_api_info(&self) -> Result<ShodanClientResponse<ApiInfoResponse>, reqwest::Error> {
-        let url = self.build_request_url("/api-info", None);
-
-        let res = reqwest::blocking::get(url)?.json::<ShodanClientResponse<ApiInfoResponse>>()?;
-
-        Ok(res)
+        Self::fetch(self.build_request_url("/api-info", None))
     }
 }
 

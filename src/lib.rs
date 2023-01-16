@@ -1,3 +1,4 @@
+use serde::Deserialize;
 use crate::response::ShodanClientResponse;
 use std::collections::HashMap;
 use url::Url;
@@ -33,6 +34,10 @@ impl ShodanClient {
         }
 
         return url.to_string();
+    }
+
+    fn fetch<T: for<'a> Deserialize<'a>>(url: String) -> Result<ShodanClientResponse<T>, reqwest::Error> {
+        Ok(reqwest::blocking::get(url)?.json::<ShodanClientResponse<T>>()?)
     }
 }
 
