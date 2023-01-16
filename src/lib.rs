@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use url::Url;
 
 pub mod account;
-pub mod api_info;
+pub mod api_status;
 pub mod response;
 
 const BASE_API_URL: &'static str = "https://api.shodan.io";

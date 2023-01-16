@@ -34,7 +34,7 @@ impl ApiInfo for ShodanClient {
 
 #[cfg(test)]
 pub mod tests {
-    use crate::api_info::ApiInfo;
+    use crate::api_status::ApiInfo;
     use crate::response::ShodanClientResponse;
     use crate::tests::get_test_api_key;
     use crate::ShodanClient;
