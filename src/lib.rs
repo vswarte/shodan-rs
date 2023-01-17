@@ -10,6 +10,7 @@ pub mod dns;
 pub mod response;
 pub mod scanning;
 pub mod utility;
+pub mod search;
 
 const BASE_API_URL: &'static str = "https://api.shodan.io";
 
@@ -30,7 +31,8 @@ impl ShodanClient {
         let mut url = Url::parse(BASE_API_URL).unwrap();
         url.set_path(endpoint);
 
-        url.query_pairs_mut().append_pair("key", self.api_key.as_str());
+        url.query_pairs_mut()
+            .append_pair("key", self.api_key.as_str());
 
         if let Some(url_parameters) = parameters {
             url.query_pairs_mut()
@@ -54,7 +56,6 @@ mod tests {
     pub fn get_test_api_key() -> String {
         let api_key = env::var("SHODAN_TEST_KEY");
         match api_key {
-            // Unit tests aren't complete without the necessary memory leak
             Ok(key) => key,
             Err(_) => panic!("Did not specify a shodan API key for testing"),
         }
