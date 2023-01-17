@@ -1,11 +1,36 @@
 # Shodan-rs
 
-A shodan client written in rust (if that wasn't clear yet). Heavily WIP so docs are TODO :-(
+A shodan client written in rust (if that wasn't clear yet). This library is heavily in flux and is missing a lot of
+components. I suggest waiting until the API is less in flux and there is a crate published.
 
 ## API support
 The official shodan API documentation can be found [here](https://developer.shodan.io/api).
 This client does not support the entire API as I only have an account with a `dev` plan.
 You can review the support table below.
+
+## Usage
+First off you'll want to create a `ShodanClient`. This requires an API key from [shodan.io](https://shodan.io).
+Once you're acquired your key you can spawn a client like so:
+```rust
+let shodan_client = ShodanClient::new(String::from("API-KEY-GOES-HERE"));
+```
+
+You can then make calls to the shodan API. As an example we can fetch our shodan account details:
+```rust
+let account_details_response = client.get_account_profile().unwrap();
+if let ShodanClientResponse::Response(account_details) = account_details_response {
+    println!("Account Details: {:?}", account_details);
+}
+```
+
+Note: the `unwrap()` here glosses over a possible `reqwest::Error` that might occur if something odd happens with the 
+transport itself (ex: SSL certificate errors, a general lack of connectivity, etc). You should be handling this properly if
+you don't want to your program to panic. I have omitted this for the sake of brevity.
+
+The `Result<T, E>` coming from any call to the shodan API will always wrap enum `ShodanClientResponse` which can be
+either of variant `ShodanClientResponse::Response` or `ShodanClientResponse::Error`, the latter of which indicates
+an error response from the shodan API itself (ex: rate limiting, plan constraits or owning insufficient credits for a
+call).
 
 ### API support
 | Realm | API          | Verb   | Endpoint                                              |       Support        |
