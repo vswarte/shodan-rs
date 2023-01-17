@@ -33,51 +33,56 @@ an error response from the shodan API itself (ex: rate limiting, plan constraits
 call).
 
 ### API support
-| Realm | API          | Verb   | Endpoint                                              |       Support        |
-|:------|:-------------|:-------|:------------------------------------------------------|:--------------------:|
-| REST  | Search       | GET    | /shodan/host/{ip}                                     | :white_large_square: |
-| REST  | Search       | GET    | /shodan/host/count                                    | :white_large_square: |
-| REST  | Search       | GET    | /shodan/host/search                                   | :white_large_square: |
-| REST  | Search       | GET    | /shodan/host/search/facets                            | :white_large_square: |
-| REST  | Search       | GET    | /shodan/host/search/filters                           | :white_large_square: |
-| REST  | Search       | GET    | /shodan/host/search/tokens                            | :white_large_square: |
-| REST  | Scanning     | GET    | /shodan/ports                                         |  :white_check_mark:  |
-| REST  | Scanning     | GET    | /shodan/protocols                                     |  :white_check_mark:  |
-| REST  | Scanning     | POST   | /shodan/scan                                          | :white_large_square: |
-| REST  | Scanning     | POST   | /shodan/scan/internet                                 | :white_large_square: |
-| REST  | Scanning     | GET    | /shodan/scans                                         | :white_large_square: |
-| REST  | Scanning     | GET    | /shodan/scan/{id}                                     | :white_large_square: |
-| REST  | Alerts       | POST   | /shodan/alert                                         | :white_large_square: |
-| REST  | Alerts       | GET    | /shodan/alert/{id}/info                               | :white_large_square: |
-| REST  | Alerts       | GET    | /shodan/alert/{id}/info                               | :white_large_square: |
-| REST  | Alerts       | DELETE | /shodan/alert/{id}                                    | :white_large_square: |
-| REST  | Alerts       | POST   | /shodan/alert/{id}                                    | :white_large_square: |
-| REST  | Alerts       | GET    | /shodan/alert/info                                    | :white_large_square: |
-| REST  | Alerts       | GET    | /shodan/alert/triggers                                | :white_large_square: |
-| REST  | Alerts       | PUT    | /shodan/alert/{id}/trigger/{trigger}                  | :white_large_square: |
-| REST  | Alerts       | DELETE | /shodan/alert/{id}/trigger/{trigger}                  | :white_large_square: |
-| REST  | Alerts       | PUT    | /shodan/alert/{id}/trigger/{trigger}/ignore/{service} | :white_large_square: |
-| REST  | Alerts       | DELETE | /shodan/alert/{id}/trigger/{trigger}/ignore/{service} | :white_large_square: |
-| REST  | Alerts       | PUT    | /shodan/alert/{id}/notifier/{notifier_id}             | :white_large_square: |
-| REST  | Alerts       | DELETE | /shodan/alert/{id}/notifier/{notifier_id}             | :white_large_square: |
-| REST  | Notifiers    | GET    | /notifier                                             | :white_large_square: |
-| REST  | Notifiers    | GET    | /notifier/provider                                    | :white_large_square: |
-| REST  | Notifiers    | POST   | /notifier                                             | :white_large_square: |
-| REST  | Notifiers    | DELETE | /notifier/{id}                                        | :white_large_square: |
-| REST  | Notifiers    | GET    | /notifier/{id}                                        | :white_large_square: |
-| REST  | Notifiers    | PUT    | /notifier/{id}                                        | :white_large_square: |
-| REST  | Directory    | GET    | /shodan/query                                         |  :white_check_mark:  |
-| REST  | Directory    | GET    | /shodan/query/search                                  |  :white_check_mark:  |
-| REST  | Directory    | GET    | /shodan/query/tags                                    |  :white_check_mark:  |
-| REST  | Bulk         | GET    | /shodan/data                                          | :white_large_square: |
-| REST  | Bulk         | GET    | /shodan/data/{dataset}                                | :white_large_square: |
-| REST  | Organization | GET    | /org                                                  | :white_large_square: |
-| REST  | Organization | PUT    | /org/member/{user}                                    | :white_large_square: |
-| REST  | Organization | DELETE | /org/member/{user}                                    | :white_large_square: |
-| REST  | Account      | GET    | /account/profile                                      |  :white_check_mark:  |
-| REST  | DNS          | GET    | /dns/domain/{domain}                                  |  :white_check_mark:  |
-| REST  | DNS          | GET    | /dns/resolve                                          |  :white_check_mark:  |
-| REST  | DNS          | GET    | /dns/reverse                                          |  :white_check_mark:  |
-| REST  | Utility      | GET    | /tools/httpheaders                                    |  :white_check_mark:  |
-| REST  | Utility      | GET    | /tools/myip                                           |  :white_check_mark:  |
-| REST  | API Status   | GET    | /api-info                                             |  :white_check_mark:  |
+
+:heavy_check_mark: indicates full support for the endpoint.
+:heavy_division_sign: indicates partial support for the endpoint.
+Emptyness indicates no support yet for the endpoint.
+
+| Realm | API          | Verb   | Endpoint                                              |      Support       |
+|:------|:-------------|:-------|:------------------------------------------------------|:------------------:|
+| REST  | Search       | GET    | /shodan/host/{ip}                                     |                    |
+| REST  | Search       | GET    | /shodan/host/count                                    |                    |
+| REST  | Search       | GET    | /shodan/host/search                                   |                    |
+| REST  | Search       | GET    | /shodan/host/search/facets                            |                    |
+| REST  | Search       | GET    | /shodan/host/search/filters                           |                    |
+| REST  | Search       | GET    | /shodan/host/search/tokens                            |                    |
+| REST  | Scanning     | GET    | /shodan/ports                                         | :heavy_check_mark: |
+| REST  | Scanning     | GET    | /shodan/protocols                                     | :heavy_check_mark: |
+| REST  | Scanning     | POST   | /shodan/scan                                          |                    |
+| REST  | Scanning     | POST   | /shodan/scan/internet                                 |                    |
+| REST  | Scanning     | GET    | /shodan/scans                                         |                    |
+| REST  | Scanning     | GET    | /shodan/scan/{id}                                     |                    |
+| REST  | Alerts       | POST   | /shodan/alert                                         |                    |
+| REST  | Alerts       | GET    | /shodan/alert/{id}/info                               |                    |
+| REST  | Alerts       | GET    | /shodan/alert/{id}/info                               |                    |
+| REST  | Alerts       | DELETE | /shodan/alert/{id}                                    |                    |
+| REST  | Alerts       | POST   | /shodan/alert/{id}                                    |                    |
+| REST  | Alerts       | GET    | /shodan/alert/info                                    |                    |
+| REST  | Alerts       | GET    | /shodan/alert/triggers                                |                    |
+| REST  | Alerts       | PUT    | /shodan/alert/{id}/trigger/{trigger}                  |                    |
+| REST  | Alerts       | DELETE | /shodan/alert/{id}/trigger/{trigger}                  |                    |
+| REST  | Alerts       | PUT    | /shodan/alert/{id}/trigger/{trigger}/ignore/{service} |                    |
+| REST  | Alerts       | DELETE | /shodan/alert/{id}/trigger/{trigger}/ignore/{service} |                    |
+| REST  | Alerts       | PUT    | /shodan/alert/{id}/notifier/{notifier_id}             |                    |
+| REST  | Alerts       | DELETE | /shodan/alert/{id}/notifier/{notifier_id}             |                    |
+| REST  | Notifiers    | GET    | /notifier                                             |                    |
+| REST  | Notifiers    | GET    | /notifier/provider                                    |                    |
+| REST  | Notifiers    | POST   | /notifier                                             |                    |
+| REST  | Notifiers    | DELETE | /notifier/{id}                                        |                    |
+| REST  | Notifiers    | GET    | /notifier/{id}                                        |                    |
+| REST  | Notifiers    | PUT    | /notifier/{id}                                        |                    |
+| REST  | Directory    | GET    | /shodan/query                                         | :heavy_check_mark: |
+| REST  | Directory    | GET    | /shodan/query/search                                  | :heavy_check_mark: |
+| REST  | Directory    | GET    | /shodan/query/tags                                    | :heavy_check_mark: |
+| REST  | Bulk         | GET    | /shodan/data                                          |                    |
+| REST  | Bulk         | GET    | /shodan/data/{dataset}                                |                    |
+| REST  | Organization | GET    | /org                                                  |                    |
+| REST  | Organization | PUT    | /org/member/{user}                                    |                    |
+| REST  | Organization | DELETE | /org/member/{user}                                    |                    |
+| REST  | Account      | GET    | /account/profile                                      | :heavy_check_mark: |
+| REST  | DNS          | GET    | /dns/domain/{domain}                                  | :heavy_check_mark: |
+| REST  | DNS          | GET    | /dns/resolve                                          | :heavy_check_mark: |
+| REST  | DNS          | GET    | /dns/reverse                                          | :heavy_check_mark: |
+| REST  | Utility      | GET    | /tools/httpheaders                                    | :heavy_check_mark: |
+| REST  | Utility      | GET    | /tools/myip                                           | :heavy_check_mark: |
+| REST  | API Status   | GET    | /api-info                                             | :heavy_check_mark: |
