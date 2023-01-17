@@ -17,7 +17,7 @@ let shodan_client = ShodanClient::new(String::from("API-KEY-GOES-HERE"));
 
 You can then make calls to the shodan API. As an example we can fetch our shodan account details:
 ```rust
-let account_details_response = client.get_account_profile().unwrap();
+let account_details_response = shodan_client.get_account_profile().unwrap();
 if let ShodanClientResponse::Response(account_details) = account_details_response {
     println!("Account Details: {:?}", account_details);
 }
