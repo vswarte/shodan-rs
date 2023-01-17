@@ -38,6 +38,8 @@ call).
 :heavy_division_sign: indicates partial support for the endpoint.
 Emptyness indicates no support yet for the endpoint.
 
+The client currently only supports the REST API although I do want to add support for the streaming API eventually.
+
 | Realm | API          | Verb   | Endpoint                                              |      Support       |
 |:------|:-------------|:-------|:------------------------------------------------------|:------------------:|
 | REST  | Search       | GET    | /shodan/host/{ip}                                     |                    |
