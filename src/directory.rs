@@ -81,7 +81,7 @@ pub mod tests {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_directory_query().unwrap();
 
-        assert!(matches!(response, ShodanClientResponse::Response { .. }));
+        assert!(matches!(response, ShodanClientResponse::Response { .. }), "Response was {:?}", response);
     }
 
     #[test]
@@ -91,7 +91,7 @@ pub mod tests {
             .get_directory_query_search(String::from("webcam"))
             .unwrap();
 
-        assert!(matches!(response, ShodanClientResponse::Response { .. }));
+        assert!(matches!(response, ShodanClientResponse::Response { .. }), "Response was {:?}", response);
     }
 
     #[test]
@@ -99,6 +99,6 @@ pub mod tests {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_directory_query_tags().unwrap();
 
-        assert!(matches!(response, ShodanClientResponse::Response { .. }));
+        assert!(matches!(response, ShodanClientResponse::Response { .. }), "Response was {:?}", response);
     }
 }

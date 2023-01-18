@@ -44,6 +44,6 @@ pub mod tests {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_api_info().unwrap();
 
-        assert!(matches!(response, ShodanClientResponse::Response { .. }));
+        assert!(matches!(response, ShodanClientResponse::Response { .. }), "Response was {:?}", response);
     }
 }
