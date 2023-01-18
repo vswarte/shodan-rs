@@ -88,3 +88,15 @@ The client currently only supports the REST API although I do want to add suppor
 | REST  | Utility      | GET    | /tools/httpheaders                                    |  :heavy_check_mark:   |
 | REST  | Utility      | GET    | /tools/myip                                           |  :heavy_check_mark:   |
 | REST  | API Status   | GET    | /api-info                                             |  :heavy_check_mark:   |
+
+## Tests
+
+The client includes a set of tests that call out to the actual shodan API (for the time being). Once it's all proven to
+work it makes more sense mocking the responses so that testing becomes infinitely less flaky. Until then running the
+tests requires a shodan API key as well. You can supply said key to the testing suite by setting the `SHODAN_TEST_KEY`
+env var. Some endpoints in the test suite do use API credits. Running the tests is not free in that sense.
+
+### Example invocation
+```shell
+$ SHODAN_TEST_KEY=<API-KEY-GOES-HERE> cargo test
+```
