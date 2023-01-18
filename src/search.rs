@@ -7,6 +7,8 @@ trait Search {
         &self,
         ip: String,
     ) -> Result<ShodanClientResponse<SearchHostIpResponse>, reqwest::Error>;
+
+    fn get_search_host_facets(&self) -> Result<ShodanClientResponse<Vec<String>>, reqwest::Error>;
 }
 
 #[derive(Deserialize, Debug)]
@@ -43,6 +45,10 @@ impl Search for ShodanClient {
     ) -> Result<ShodanClientResponse<SearchHostIpResponse>, reqwest::Error> {
         Self::fetch(self.build_request_url(format!("/shodan/host/{ip}").as_str(), None))
     }
+
+    fn get_search_host_facets(&self) -> Result<ShodanClientResponse<Vec<String>>, reqwest::Error> {
+        Self::fetch(self.build_request_url("/shodan/host/search/facets", None))
+    }
 }
 
 #[cfg(test)]
@@ -56,7 +62,18 @@ pub mod tests {
     fn can_get_google_host_ip() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_search_host_ip(String::from("8.8.8.8")).unwrap();
-        println!("{:?}", response);
+
+        assert!(
+            matches!(response, ShodanClientResponse::Response { .. }),
+            "Response was {:?}",
+            response
+        );
+    }
+
+    #[test]
+    fn can_get_host_facets() {
+        let client = ShodanClient::new(get_test_api_key());
+        let response = client.get_search_host_facets().unwrap();
 
         assert!(
             matches!(response, ShodanClientResponse::Response { .. }),
