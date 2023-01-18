@@ -9,6 +9,8 @@ trait Search {
     ) -> Result<ShodanClientResponse<SearchHostIpResponse>, reqwest::Error>;
 
     fn get_search_host_facets(&self) -> Result<ShodanClientResponse<Vec<String>>, reqwest::Error>;
+
+    fn get_search_host_filters(&self) -> Result<ShodanClientResponse<Vec<String>>, reqwest::Error>;
 }
 
 #[derive(Deserialize, Debug)]
@@ -49,6 +51,10 @@ impl Search for ShodanClient {
     fn get_search_host_facets(&self) -> Result<ShodanClientResponse<Vec<String>>, reqwest::Error> {
         Self::fetch(self.build_request_url("/shodan/host/search/facets", None))
     }
+
+    fn get_search_host_filters(&self) -> Result<ShodanClientResponse<Vec<String>>, reqwest::Error> {
+        Self::fetch(self.build_request_url("/shodan/host/search/filters", None))
+    }
 }
 
 #[cfg(test)]
@@ -74,6 +80,18 @@ pub mod tests {
     fn can_get_host_facets() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_search_host_facets().unwrap();
+
+        assert!(
+            matches!(response, ShodanClientResponse::Response { .. }),
+            "Response was {:?}",
+            response
+        );
+    }
+
+    #[test]
+    fn can_get_host_filters() {
+        let client = ShodanClient::new(get_test_api_key());
+        let response = client.get_search_host_filters().unwrap();
 
         assert!(
             matches!(response, ShodanClientResponse::Response { .. }),

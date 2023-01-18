@@ -46,7 +46,7 @@ The client currently only supports the REST API although I do want to add suppor
 | REST  | Search       | GET    | /shodan/host/count                                    |                       |
 | REST  | Search       | GET    | /shodan/host/search                                   |                       |
 | REST  | Search       | GET    | /shodan/host/search/facets                            |  :heavy_check_mark:   |
-| REST  | Search       | GET    | /shodan/host/search/filters                           |                       |
+| REST  | Search       | GET    | /shodan/host/search/filters                           |  :heavy_check_mark:   |
 | REST  | Search       | GET    | /shodan/host/search/tokens                            |                       |
 | REST  | Scanning     | GET    | /shodan/ports                                         |  :heavy_check_mark:   |
 | REST  | Scanning     | GET    | /shodan/protocols                                     |  :heavy_check_mark:   |
