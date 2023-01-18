@@ -55,6 +55,6 @@ pub mod tests {
         let response = client.get_search_host_ip(String::from("8.8.8.8")).unwrap();
         println!("{:?}", response);
 
-        assert!(matches!(response, ShodanClientResponse::Response { .. }));
+        assert!(matches!(response, ShodanClientResponse::Response { .. }), "Response was {:?}", response);
     }
 }

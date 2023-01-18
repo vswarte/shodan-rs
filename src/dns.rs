@@ -77,7 +77,7 @@ pub mod tests {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_dns_domain(String::from("google.com")).unwrap();
 
-        assert!(matches!(response, ShodanClientResponse::Response { .. }));
+        assert!(matches!(response, ShodanClientResponse::Response { .. }), "Response was {:?}", response);
     }
 
     #[test]
@@ -90,7 +90,7 @@ pub mod tests {
             ])
             .unwrap();
 
-        assert!(matches!(response, ShodanClientResponse::Response { .. }));
+        assert!(matches!(response, ShodanClientResponse::Response { .. }), "Response was {:?}", response);
     }
 
     #[test]
@@ -100,6 +100,6 @@ pub mod tests {
             .get_dns_reverse(vec![String::from("8.8.8.8"), String::from("1.1.1.1")])
             .unwrap();
 
-        assert!(matches!(response, ShodanClientResponse::Response { .. }));
+        assert!(matches!(response, ShodanClientResponse::Response { .. }), "Response was {:?}", response);
     }
 }

@@ -41,6 +41,6 @@ pub mod tests {
         assert!(
             matches!(response, ShodanClientResponse::Response { .. })
                 || matches!(response, ShodanClientResponse::Error { .. })
-        );
+            , "Response was {:?}", response);
     }
 }
