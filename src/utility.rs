@@ -33,7 +33,11 @@ pub mod tests {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_my_ip().unwrap();
 
-        assert!(matches!(response, ShodanClientResponse::Response { .. }), "Response was {:?}", response);
+        assert!(
+            matches!(response, ShodanClientResponse::Response { .. }),
+            "Response was {:?}",
+            response
+        );
     }
 
     #[test]
@@ -41,6 +45,10 @@ pub mod tests {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_http_headers().unwrap();
 
-        assert!(matches!(response, ShodanClientResponse::Response { .. }), "Response was {:?}", response);
+        assert!(
+            matches!(response, ShodanClientResponse::Response { .. }),
+            "Response was {:?}",
+            response
+        );
     }
 }

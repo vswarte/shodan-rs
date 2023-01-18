@@ -1,9 +1,12 @@
-use serde::Deserialize;
 use crate::response::ShodanClientResponse;
 use crate::ShodanClient;
+use serde::Deserialize;
 
 trait Search {
-    fn get_search_host_ip(&self, ip: String) -> Result<ShodanClientResponse<SearchHostIpResponse>, reqwest::Error>;
+    fn get_search_host_ip(
+        &self,
+        ip: String,
+    ) -> Result<ShodanClientResponse<SearchHostIpResponse>, reqwest::Error>;
 }
 
 #[derive(Deserialize, Debug)]
@@ -44,10 +47,10 @@ impl Search for ShodanClient {
 
 #[cfg(test)]
 pub mod tests {
-    use crate::ShodanClient;
+    use crate::response::ShodanClientResponse;
     use crate::search::Search;
     use crate::tests::get_test_api_key;
-    use crate::response::ShodanClientResponse;
+    use crate::ShodanClient;
 
     #[test]
     fn can_get_google_host_ip() {
@@ -55,6 +58,10 @@ pub mod tests {
         let response = client.get_search_host_ip(String::from("8.8.8.8")).unwrap();
         println!("{:?}", response);
 
-        assert!(matches!(response, ShodanClientResponse::Response { .. }), "Response was {:?}", response);
+        assert!(
+            matches!(response, ShodanClientResponse::Response { .. }),
+            "Response was {:?}",
+            response
+        );
     }
 }

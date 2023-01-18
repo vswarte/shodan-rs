@@ -40,7 +40,9 @@ pub mod tests {
         // response or API error
         assert!(
             matches!(response, ShodanClientResponse::Response { .. })
-                || matches!(response, ShodanClientResponse::Error { .. })
-            , "Response was {:?}", response);
+                || matches!(response, ShodanClientResponse::Error { .. }),
+            "Response was {:?}",
+            response
+        );
     }
 }

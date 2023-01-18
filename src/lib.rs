@@ -9,8 +9,8 @@ pub mod directory;
 pub mod dns;
 pub mod response;
 pub mod scanning;
-pub mod utility;
 pub mod search;
+pub mod utility;
 
 const BASE_API_URL: &'static str = "https://api.shodan.io";
 
