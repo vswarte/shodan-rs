@@ -94,7 +94,9 @@ The client currently only supports the REST API although I do want to add suppor
 The client includes a set of tests that call out to the actual shodan API (for the time being). Once it's all proven to
 work it makes more sense mocking the responses so that testing becomes infinitely less flaky. Until then running the
 tests requires a shodan API key as well. You can supply said key to the testing suite by setting the `SHODAN_TEST_KEY`
-env var. Some endpoints in the test suite do use API credits. Running the tests is not free in that sense.
+env var. Some endpoints in the test suite do use API credits. Running the tests is not free in that sense. Another thing
+to note is that there are no timeouts on the tests so you'll likely run into rate limiting errors coming from the shodan
+API.
 
 ### Example invocation
 ```shell
