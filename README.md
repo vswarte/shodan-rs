@@ -29,7 +29,7 @@ you don't want to your program to panic. I have omitted this for the sake of bre
 
 The `Result<T, E>` coming from any call to the shodan API will always wrap enum `ShodanClientResponse` which can be
 either of variant `ShodanClientResponse::Response` or `ShodanClientResponse::Error`, the latter of which indicates
-an error response from the shodan API itself (ex: rate limiting, plan constraits or owning insufficient credits for a
+an error response from the shodan API itself (ex: rate limiting, plan constraints or owning insufficient credits for a
 call).
 
 ### API support
