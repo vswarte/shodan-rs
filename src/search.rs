@@ -41,7 +41,7 @@ impl Search for ShodanClient {
         &self,
         ip: String,
     ) -> Result<ShodanClientResponse<SearchHostIpResponse>, reqwest::Error> {
-        Self::fetch(self.build_request_url(format!("/shodan/host/{}", ip).as_str(), None))
+        Self::fetch(self.build_request_url(format!("/shodan/host/{ip}").as_str(), None))
     }
 }
 

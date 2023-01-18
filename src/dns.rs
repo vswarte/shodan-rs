@@ -43,7 +43,7 @@ impl Dns for ShodanClient {
         &self,
         domain: String,
     ) -> Result<ShodanClientResponse<DnsDomainResponse>, reqwest::Error> {
-        Self::fetch(self.build_request_url(format!("/dns/domain/{}", domain).as_str(), None))
+        Self::fetch(self.build_request_url(format!("/dns/domain/{domain}").as_str(), None))
     }
 
     fn get_dns_resolve(
