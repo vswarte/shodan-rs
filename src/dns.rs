@@ -88,7 +88,9 @@ pub mod tests {
     #[test]
     fn can_get_dns_domain() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.dns_domain(String::from("google.com")).unwrap();
+        let response = client
+            .dns_domain(String::from("google.com"), None, None, None)
+            .unwrap();
 
         assert!(
             matches!(response, ShodanClientResponse::Response { .. }),
