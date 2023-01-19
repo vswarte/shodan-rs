@@ -1,22 +1,23 @@
 use crate::response::ShodanClientResponse;
 use crate::ShodanClient;
 use std::collections::HashMap;
+use crate::error::ShodanError;
 
 trait Utility {
-    fn get_my_ip(&self) -> Result<ShodanClientResponse<String>, reqwest::Error>;
+    fn get_my_ip(&self) -> Result<String, ShodanError>;
     fn get_http_headers(
         &self,
-    ) -> Result<ShodanClientResponse<HashMap<String, String>>, reqwest::Error>;
+    ) -> Result<HashMap<String, String>, ShodanError>;
 }
 
 impl Utility for ShodanClient {
-    fn get_my_ip(&self) -> Result<ShodanClientResponse<String>, reqwest::Error> {
+    fn get_my_ip(&self) -> Result<String, ShodanError> {
         Self::fetch(self.build_request_url("/tools/myip", None))
     }
 
     fn get_http_headers(
         &self,
-    ) -> Result<ShodanClientResponse<HashMap<String, String>>, reqwest::Error> {
+    ) -> Result<HashMap<String, String>, ShodanError> {
         Self::fetch(self.build_request_url("/tools/httpheaders", None))
     }
 }
@@ -33,11 +34,6 @@ pub mod tests {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_my_ip().unwrap();
 
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
     }
 
     #[test]
@@ -45,10 +41,5 @@ pub mod tests {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_http_headers().unwrap();
 
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
     }
 }

@@ -1,11 +1,12 @@
 use crate::response::ShodanClientResponse;
 use crate::ShodanClient;
 use serde::Deserialize;
+use crate::error::ShodanError;
 
 pub trait Account {
     fn get_account_profile(
         &self,
-    ) -> Result<ShodanClientResponse<AccountProfileResponse>, reqwest::Error>;
+    ) -> Result<AccountProfileResponse, ShodanError>;
 }
 
 #[derive(Deserialize, Debug)]
@@ -19,7 +20,7 @@ pub struct AccountProfileResponse {
 impl Account for ShodanClient {
     fn get_account_profile(
         &self,
-    ) -> Result<ShodanClientResponse<AccountProfileResponse>, reqwest::Error> {
+    ) -> Result<AccountProfileResponse, ShodanError> {
         Self::fetch(self.build_request_url("/account/profile", None))
     }
 }
@@ -38,11 +39,6 @@ pub mod tests {
 
         // This endpoint is heavily rate limited so we should be good with either
         // response or API error
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. })
-                || matches!(response, ShodanClientResponse::Error { .. }),
-            "Response was {:?}",
-            response
-        );
+
     }
 }

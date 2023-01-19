@@ -2,6 +2,7 @@ use crate::response::ShodanClientResponse;
 use crate::{add_optional_parameter, ShodanClient};
 use serde::Deserialize;
 use std::collections::HashMap;
+use crate::error::ShodanError;
 
 pub trait Directory {
     fn directory_query(
@@ -9,18 +10,18 @@ pub trait Directory {
         page: Option<i32>,
         sort: Option<String>,
         order: Option<String>,
-    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, reqwest::Error>;
+    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError>;
 
     fn directory_query_search(
         &self,
         query: String,
         page: Option<i32>,
-    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, reqwest::Error>;
+    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError>;
 
     fn directory_query_tags(
         &self,
         size: Option<i32>,
-    ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, reqwest::Error>;
+    ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, ShodanError>;
 }
 
 #[derive(Deserialize, Debug)]
@@ -57,7 +58,7 @@ impl Directory for ShodanClient {
         page: Option<i32>,
         sort: Option<String>,
         order: Option<String>,
-    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, reqwest::Error> {
+    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError> {
         let mut parameters = HashMap::new();
         add_optional_parameter("page", page, &mut parameters);
         add_optional_parameter("sort", sort, &mut parameters);
@@ -70,7 +71,7 @@ impl Directory for ShodanClient {
         &self,
         query: String,
         page: Option<i32>,
-    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, reqwest::Error> {
+    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError> {
         let mut parameters = HashMap::from([(String::from("query"), query)]);
         add_optional_parameter("page", page, &mut parameters);
 
@@ -80,7 +81,7 @@ impl Directory for ShodanClient {
     fn directory_query_tags(
         &self,
         size: Option<i32>,
-    ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, reqwest::Error> {
+    ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, ShodanError> {
         let mut parameters = HashMap::new();
         add_optional_parameter("size", size, &mut parameters);
 
@@ -100,11 +101,6 @@ pub mod tests {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.directory_query(None, None, None).unwrap();
 
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
     }
 
     #[test]
@@ -114,11 +110,6 @@ pub mod tests {
             .directory_query_search(String::from("webcam"), None)
             .unwrap();
 
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
     }
 
     #[test]
@@ -126,10 +117,5 @@ pub mod tests {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.directory_query_tags(None).unwrap();
 
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
     }
 }

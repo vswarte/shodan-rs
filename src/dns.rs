@@ -2,6 +2,7 @@ use crate::response::ShodanClientResponse;
 use crate::{add_optional_parameter, ShodanClient};
 use serde::Deserialize;
 use std::collections::HashMap;
+use crate::error::ShodanError;
 
 #[derive(Deserialize, Debug)]
 pub struct DnsDomainResponse {
@@ -28,17 +29,17 @@ trait Dns {
         history: Option<bool>,
         dns_type: Option<String>,
         page: Option<i32>,
-    ) -> Result<ShodanClientResponse<DnsDomainResponse>, reqwest::Error>;
+    ) -> Result<DnsDomainResponse, ShodanError>;
 
     fn dns_resolve(
         &self,
         hostnames: Vec<String>,
-    ) -> Result<ShodanClientResponse<HashMap<String, Option<String>>>, reqwest::Error>;
+    ) -> Result<HashMap<String, Option<String>>, ShodanError>;
 
     fn dns_reverse(
         &self,
         ips: Vec<String>,
-    ) -> Result<ShodanClientResponse<HashMap<String, Vec<String>>>, reqwest::Error>;
+    ) -> Result<HashMap<String, Vec<String>>, ShodanError>;
 }
 
 impl Dns for ShodanClient {
@@ -48,7 +49,7 @@ impl Dns for ShodanClient {
         history: Option<bool>,
         dns_type: Option<String>,
         page: Option<i32>,
-    ) -> Result<ShodanClientResponse<DnsDomainResponse>, reqwest::Error> {
+    ) -> Result<DnsDomainResponse, ShodanError> {
         let mut parameters = HashMap::new();
         add_optional_parameter("history", history, &mut parameters);
         add_optional_parameter("dns_type", dns_type, &mut parameters);
@@ -62,7 +63,7 @@ impl Dns for ShodanClient {
     fn dns_resolve(
         &self,
         hostnames: Vec<String>,
-    ) -> Result<ShodanClientResponse<HashMap<String, Option<String>>>, reqwest::Error> {
+    ) -> Result<HashMap<String, Option<String>>, ShodanError> {
         let parameters = HashMap::from([(String::from("hostnames"), hostnames.join(","))]);
 
         Self::fetch(self.build_request_url("/dns/resolve", Some(parameters)))
@@ -71,7 +72,7 @@ impl Dns for ShodanClient {
     fn dns_reverse(
         &self,
         ips: Vec<String>,
-    ) -> Result<ShodanClientResponse<HashMap<String, Vec<String>>>, reqwest::Error> {
+    ) -> Result<HashMap<String, Vec<String>>, ShodanError> {
         let parameters = HashMap::from([(String::from("ips"), ips.join(","))]);
 
         Self::fetch(self.build_request_url("/dns/reverse", Some(parameters)))
@@ -92,11 +93,7 @@ pub mod tests {
             .dns_domain(String::from("google.com"), None, None, None)
             .unwrap();
 
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
+
     }
 
     #[test]
@@ -109,11 +106,6 @@ pub mod tests {
             ])
             .unwrap();
 
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
     }
 
     #[test]
@@ -123,10 +115,5 @@ pub mod tests {
             .dns_reverse(vec![String::from("8.8.8.8"), String::from("1.1.1.1")])
             .unwrap();
 
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
     }
 }
