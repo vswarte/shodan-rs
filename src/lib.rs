@@ -49,7 +49,7 @@ impl ShodanClient {
     }
 }
 
-pub fn add_parameter(name: &str, param: Option<impl ToString>, map: &mut HashMap<String, String>) {
+pub fn add_optional_parameter(name: &str, param: Option<impl ToString>, map: &mut HashMap<String, String>) {
     if let Some(unwrapped) = param {
         map.insert(name.into(), unwrapped.to_string());
     }

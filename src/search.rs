@@ -1,5 +1,5 @@
 use crate::response::ShodanClientResponse;
-use crate::{add_parameter, ShodanClient};
+use crate::{add_optional_parameter, ShodanClient};
 use reqwest::Error;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -94,8 +94,8 @@ impl Search for ShodanClient {
         minifi: Option<bool>,
     ) -> Result<ShodanClientResponse<SearchHostIpResponse>, reqwest::Error> {
         let mut parameters = HashMap::new();
-        add_parameter("history", history, &mut parameters);
-        add_parameter("minifi", minifi, &mut parameters);
+        add_optional_parameter("history", history, &mut parameters);
+        add_optional_parameter("minifi", minifi, &mut parameters);
 
         Self::fetch(self.build_request_url(format!("/shodan/host/{ip}").as_str(), Some(parameters)))
     }
@@ -108,9 +108,9 @@ impl Search for ShodanClient {
         minifi: Option<bool>,
     ) -> Result<ShodanClientResponse<SearchResponse>, Error> {
         let mut parameters = HashMap::from([(String::from("query"), query)]);
-        add_parameter("facets", facets, &mut parameters);
-        add_parameter("page", page, &mut parameters);
-        add_parameter("minifi", minifi, &mut parameters);
+        add_optional_parameter("facets", facets, &mut parameters);
+        add_optional_parameter("page", page, &mut parameters);
+        add_optional_parameter("minifi", minifi, &mut parameters);
 
         Self::fetch(self.build_request_url(format!("/shodan/host/search").as_str(), Some(parameters)))
     }
@@ -121,7 +121,7 @@ impl Search for ShodanClient {
         facets: Option<String>,
     ) -> Result<ShodanClientResponse<CountResponse>, Error> {
         let mut parameters = HashMap::from([(String::from("query"), query)]);
-        add_parameter("facets", facets, &mut parameters);
+        add_optional_parameter("facets", facets, &mut parameters);
 
         Self::fetch(self.build_request_url(format!("/shodan/host/count").as_str(), Some(parameters)))
     }

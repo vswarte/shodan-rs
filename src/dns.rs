@@ -1,5 +1,5 @@
 use crate::response::ShodanClientResponse;
-use crate::{add_parameter, ShodanClient};
+use crate::{add_optional_parameter, ShodanClient};
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -50,9 +50,9 @@ impl Dns for ShodanClient {
         page: Option<i32>,
     ) -> Result<ShodanClientResponse<DnsDomainResponse>, reqwest::Error> {
         let mut parameters = HashMap::new();
-        add_parameter("history", history, &mut parameters);
-        add_parameter("dns_type", dns_type, &mut parameters);
-        add_parameter("page", page, &mut parameters);
+        add_optional_parameter("history", history, &mut parameters);
+        add_optional_parameter("dns_type", dns_type, &mut parameters);
+        add_optional_parameter("page", page, &mut parameters);
 
         Self::fetch(
             self.build_request_url(format!("/dns/domain/{domain}").as_str(), Some(parameters)),
