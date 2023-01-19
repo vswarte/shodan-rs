@@ -1,7 +1,7 @@
-use std::collections::HashMap;
 use crate::response::ShodanClientResponse;
 use crate::{add_parameter, ShodanClient};
 use serde::Deserialize;
+use std::collections::HashMap;
 
 trait Search {
     fn search_host_ip(
@@ -75,7 +75,9 @@ pub mod tests {
     #[test]
     fn can_get_google_host_ip() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.search_host_ip(String::from("8.8.8.8"), None, None).unwrap();
+        let response = client
+            .search_host_ip(String::from("8.8.8.8"), None, None)
+            .unwrap();
 
         assert!(
             matches!(response, ShodanClientResponse::Response { .. }),

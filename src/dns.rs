@@ -27,7 +27,7 @@ trait Dns {
         domain: String,
         history: Option<bool>,
         dns_type: Option<String>,
-        page: Option<i32>
+        page: Option<i32>,
     ) -> Result<ShodanClientResponse<DnsDomainResponse>, reqwest::Error>;
 
     fn dns_resolve(
@@ -47,14 +47,16 @@ impl Dns for ShodanClient {
         domain: String,
         history: Option<bool>,
         dns_type: Option<String>,
-        page: Option<i32>
+        page: Option<i32>,
     ) -> Result<ShodanClientResponse<DnsDomainResponse>, reqwest::Error> {
         let mut parameters = HashMap::new();
         add_parameter("history", history, &mut parameters);
         add_parameter("dns_type", dns_type, &mut parameters);
         add_parameter("page", page, &mut parameters);
 
-        Self::fetch(self.build_request_url(format!("/dns/domain/{domain}").as_str(), Some(parameters)))
+        Self::fetch(
+            self.build_request_url(format!("/dns/domain/{domain}").as_str(), Some(parameters)),
+        )
     }
 
     fn dns_resolve(

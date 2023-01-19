@@ -8,8 +8,7 @@ pub trait Directory {
         &self,
         page: Option<i32>,
         sort: Option<String>,
-        order: Option<String>
-
+        order: Option<String>,
     ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, reqwest::Error>;
 
     fn directory_query_search(
@@ -57,12 +56,12 @@ impl Directory for ShodanClient {
         &self,
         page: Option<i32>,
         sort: Option<String>,
-        order: Option<String>
+        order: Option<String>,
     ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, reqwest::Error> {
         let mut parameters = HashMap::new();
-        add_parameter("page", page,&mut parameters);
-        add_parameter("sort", sort,&mut parameters);
-        add_parameter("order", order,&mut parameters);
+        add_parameter("page", page, &mut parameters);
+        add_parameter("sort", sort, &mut parameters);
+        add_parameter("order", order, &mut parameters);
 
         Self::fetch(self.build_request_url("/shodan/query", Some(parameters)))
     }
@@ -73,7 +72,7 @@ impl Directory for ShodanClient {
         page: Option<i32>,
     ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, reqwest::Error> {
         let mut parameters = HashMap::from([(String::from("query"), query)]);
-        add_parameter("page", page,&mut parameters);
+        add_parameter("page", page, &mut parameters);
 
         Self::fetch(self.build_request_url("/shodan/query/search", Some(parameters)))
     }
@@ -83,7 +82,7 @@ impl Directory for ShodanClient {
         size: Option<i32>,
     ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, reqwest::Error> {
         let mut parameters = HashMap::new();
-        add_parameter("size", size,&mut parameters);
+        add_parameter("size", size, &mut parameters);
 
         Self::fetch(self.build_request_url("/shodan/query/tags", None))
     }
