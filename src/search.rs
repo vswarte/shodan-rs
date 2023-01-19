@@ -1,11 +1,14 @@
+use std::collections::HashMap;
 use crate::response::ShodanClientResponse;
-use crate::ShodanClient;
+use crate::{add_parameter, ShodanClient};
 use serde::Deserialize;
 
 trait Search {
-    fn get_search_host_ip(
+    fn search_host_ip(
         &self,
         ip: String,
+        history: Option<bool>,
+        minifi: Option<bool>,
     ) -> Result<ShodanClientResponse<SearchHostIpResponse>, reqwest::Error>;
 
     fn get_search_host_facets(&self) -> Result<ShodanClientResponse<Vec<String>>, reqwest::Error>;
@@ -41,11 +44,16 @@ pub struct SearchHostIpResponse {
 }
 
 impl Search for ShodanClient {
-    fn get_search_host_ip(
+    fn search_host_ip(
         &self,
         ip: String,
+        history: Option<bool>,
+        minifi: Option<bool>,
     ) -> Result<ShodanClientResponse<SearchHostIpResponse>, reqwest::Error> {
-        Self::fetch(self.build_request_url(format!("/shodan/host/{ip}").as_str(), None))
+        let mut parameters = HashMap::new();
+        add_parameter("history", history, &mut parameters);
+        add_parameter("minifi", minifi, &mut parameters);
+        Self::fetch(self.build_request_url(format!("/shodan/host/{ip}").as_str(), Some(parameters)))
     }
 
     fn get_search_host_facets(&self) -> Result<ShodanClientResponse<Vec<String>>, reqwest::Error> {
@@ -67,7 +75,7 @@ pub mod tests {
     #[test]
     fn can_get_google_host_ip() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.get_search_host_ip(String::from("8.8.8.8")).unwrap();
+        let response = client.search_host_ip(String::from("8.8.8.8"), None, None).unwrap();
 
         assert!(
             matches!(response, ShodanClientResponse::Response { .. }),
