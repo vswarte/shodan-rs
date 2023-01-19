@@ -69,13 +69,21 @@ pub struct Match {
 
 #[derive(Deserialize, Debug)]
 pub struct SearchResponse {
-    matches: Vec<Match>,
-    pub total: u32
+    pub matches: Vec<Match>,
+    pub total: u32,
+    pub facets: Option<HashMap<String, Vec<Facet>>>
 }
 
 #[derive(Deserialize, Debug)]
 pub struct CountResponse {
     pub total: u32,
+    pub facets: Option<HashMap<String, Vec<Facet>>>
+}
+
+#[derive(Deserialize, Debug)]
+pub struct Facet {
+    pub count: u32,
+    pub value: String
 }
 
 impl Search for ShodanClient {
@@ -177,6 +185,20 @@ pub mod tests {
         let client = ShodanClient::new(get_test_api_key());
         let response = client
             .search_host_count(String::from("google"), None)
+            .unwrap();
+
+        assert!(
+            matches!(response, ShodanClientResponse::Response { .. }),
+            "Response was {:?}",
+            response
+        );
+    }
+
+    #[test]
+    fn can_get_google_count_with_facets() {
+        let client = ShodanClient::new(get_test_api_key());
+        let response = client
+            .search_host_count(String::from("google"), Some(String::from("country")))
             .unwrap();
 
         assert!(
