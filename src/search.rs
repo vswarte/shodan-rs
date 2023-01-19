@@ -64,26 +64,25 @@ pub struct Match {
     pub os: Option<String>,
     pub domains: Vec<String>,
     pub hostnames: Vec<String>,
-
 }
 
 #[derive(Deserialize, Debug)]
 pub struct SearchResponse {
     pub matches: Vec<Match>,
     pub total: u32,
-    pub facets: Option<HashMap<String, Vec<Facet>>>
+    pub facets: Option<HashMap<String, Vec<Facet>>>,
 }
 
 #[derive(Deserialize, Debug)]
 pub struct CountResponse {
     pub total: u32,
-    pub facets: Option<HashMap<String, Vec<Facet>>>
+    pub facets: Option<HashMap<String, Vec<Facet>>>,
 }
 
 #[derive(Deserialize, Debug)]
 pub struct Facet {
     pub count: u32,
-    pub value: String
+    pub value: String,
 }
 
 impl Search for ShodanClient {
@@ -112,7 +111,9 @@ impl Search for ShodanClient {
         add_optional_parameter("page", page, &mut parameters);
         add_optional_parameter("minifi", minifi, &mut parameters);
 
-        Self::fetch(self.build_request_url(format!("/shodan/host/search").as_str(), Some(parameters)))
+        Self::fetch(
+            self.build_request_url(format!("/shodan/host/search").as_str(), Some(parameters)),
+        )
     }
 
     fn search_host_count(
@@ -123,7 +124,9 @@ impl Search for ShodanClient {
         let mut parameters = HashMap::from([(String::from("query"), query)]);
         add_optional_parameter("facets", facets, &mut parameters);
 
-        Self::fetch(self.build_request_url(format!("/shodan/host/count").as_str(), Some(parameters)))
+        Self::fetch(
+            self.build_request_url(format!("/shodan/host/count").as_str(), Some(parameters)),
+        )
     }
 
     fn search_host_facets(&self) -> Result<ShodanClientResponse<Vec<String>>, reqwest::Error> {
