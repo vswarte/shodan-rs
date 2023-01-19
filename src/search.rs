@@ -200,6 +200,7 @@ pub mod tests {
     #[test]
     fn can_get_google_count_with_facets() {
         let client = ShodanClient::new(get_test_api_key());
+        let facets = FacetBuilder::new().add("os").add("country").add("asn").build();
         let response = client
             .search_host_count(String::from("google"), Some(String::from("country")))
             .unwrap();
