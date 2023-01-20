@@ -86,7 +86,7 @@ pub struct TokenResponse {
     pub attributes: HashMap<String, Vec<i32>>,
     pub errors: Vec<String>,
     pub string: String,
-    pub filters: Vec<String>
+    pub filters: Vec<String>,
 }
 
 #[derive(Deserialize, Debug)]
