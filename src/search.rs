@@ -73,6 +73,7 @@ pub struct Match {
 pub struct SearchResponse {
     pub matches: Vec<Match>,
     pub total: u32,
+    pub facets: Option<HashMap<String, Vec<Facet>>>,
 }
 
 #[derive(Deserialize, Debug)]
