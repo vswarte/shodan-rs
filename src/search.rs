@@ -1,9 +1,9 @@
+use crate::error::ShodanError;
 use crate::response::ShodanClientResponse;
 use crate::{add_optional_parameter, ShodanClient};
 use reqwest::Error;
 use serde::Deserialize;
 use std::collections::HashMap;
-use crate::error::ShodanError;
 
 trait Search {
     fn search_host_ip(
@@ -30,6 +30,8 @@ trait Search {
     fn search_host_facets(&self) -> Result<Vec<String>, ShodanError>;
 
     fn search_host_filters(&self) -> Result<Vec<String>, ShodanError>;
+
+    fn search_host_tokens(&self, query: String) -> Result<TokenResponse, ShodanError>;
 }
 
 #[derive(Deserialize, Debug)]
@@ -80,6 +82,14 @@ pub struct CountResponse {
 }
 
 #[derive(Deserialize, Debug)]
+pub struct TokenResponse {
+    pub attributes: HashMap<String, Vec<i32>>,
+    pub errors: Vec<String>,
+    pub string: String,
+    pub filters: Vec<String>
+}
+
+#[derive(Deserialize, Debug)]
 pub struct Facet {
     pub count: u32,
     pub value: String,
@@ -111,9 +121,7 @@ impl Search for ShodanClient {
         add_optional_parameter("page", page, &mut parameters);
         add_optional_parameter("minifi", minifi, &mut parameters);
 
-        Self::fetch(
-            self.build_request_url(format!("/shodan/host/search").as_str(), Some(parameters)),
-        )
+        Self::fetch(self.build_request_url("/shodan/host/search", Some(parameters)))
     }
 
     fn search_host_count(
@@ -124,9 +132,7 @@ impl Search for ShodanClient {
         let mut parameters = HashMap::from([(String::from("query"), query)]);
         add_optional_parameter("facets", facets, &mut parameters);
 
-        Self::fetch(
-            self.build_request_url(format!("/shodan/host/count").as_str(), Some(parameters)),
-        )
+        Self::fetch(self.build_request_url("/shodan/host/count", Some(parameters)))
     }
 
     fn search_host_facets(&self) -> Result<Vec<String>, ShodanError> {
@@ -136,11 +142,16 @@ impl Search for ShodanClient {
     fn search_host_filters(&self) -> Result<Vec<String>, ShodanError> {
         Self::fetch(self.build_request_url("/shodan/host/search/filters", None))
     }
+
+    fn search_host_tokens(&self, query: String) -> Result<TokenResponse, ShodanError> {
+        let mut parameters = HashMap::from([(String::from("query"), query)]);
+
+        Self::fetch(self.build_request_url("/shodan/host/search/tokens", Some(parameters)))
+    }
 }
 
 #[cfg(test)]
 pub mod tests {
-    use crate::builders::FacetBuilder;
     use crate::response::ShodanClientResponse;
     use crate::search::*;
     use crate::tests::get_test_api_key;
@@ -152,21 +163,18 @@ pub mod tests {
         let response = client
             .search_host_ip(String::from("8.8.8.8"), None, None)
             .unwrap();
-
     }
 
     #[test]
     fn can_get_host_facets() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.search_host_facets().unwrap();
-
     }
 
     #[test]
     fn can_get_host_filters() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.search_host_filters().unwrap();
-
     }
 
     #[test]
@@ -175,16 +183,14 @@ pub mod tests {
         let response = client
             .search_host_count(String::from("google"), None)
             .unwrap();
-
     }
 
     #[test]
     fn can_get_google_count_with_facets() {
         let client = ShodanClient::new(get_test_api_key());
-        let facets = FacetBuilder::new().add("os").add("country").add("asn").build();
         let response = client
-            .search_host_count(String::from("google"), Some(facets)).unwrap();
-
+            .search_host_count(String::from("google"), Some("os,country".to_string()))
+            .unwrap();
     }
 
     #[test]
@@ -193,6 +199,15 @@ pub mod tests {
         let response = client
             .search_host_search(String::from("google"), None, None, None)
             .unwrap();
+    }
 
+    #[test]
+    fn can_get_raspbian_tokens() {
+        let client = ShodanClient::new(get_test_api_key());
+        let response = client
+            .search_host_tokens(String::from("Raspbian port:22"))
+            .unwrap();
+
+        println!("{:?}", response)
     }
 }

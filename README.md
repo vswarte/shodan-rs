@@ -17,20 +17,15 @@ let shodan_client = ShodanClient::new(String::from("API-KEY-GOES-HERE"));
 
 You can then make calls to the shodan API. As an example we can fetch our shodan account details:
 ```rust
-let account_details_response = shodan_client.get_account_profile().unwrap();
-if let ShodanClientResponse::Response(account_details) = account_details_response {
-    println!("Account Details: {:?}", account_details);
-}
+let account_details = shodan_client.get_account_profile().unwrap();
+println!("Account Details: {:?}", account_details);
 ```
 
-Note: the `unwrap()` here glosses over a possible `reqwest::Error` that might occur if something odd happens with the 
-transport itself (ex: SSL certificate errors, a general lack of connectivity, etc). You should be handling this properly if
-you don't want to your program to panic. I have omitted this for the sake of brevity.
-
-The `Result<T, E>` coming from any call to the shodan API will always wrap enum `ShodanClientResponse` which can be
-either of variant `ShodanClientResponse::Response` or `ShodanClientResponse::Error`, the latter of which indicates
-an error response from the shodan API itself (ex: rate limiting, plan constraints or owning insufficient credits for a
-call).
+Note: the `unwrap()` here glosses over any possible errors that might occur if something odd happens with the 
+transport itself (ex: SSL certificate errors, a general lack of connectivity, etc), or an error response 
+from the shodan API itself (ex: rate limiting, plan constraints or owning insufficient credits for a call).. 
+You should be handling this properly if you don't want to your program to panic. I have omitted this for the sake of 
+brevity.
 
 ### API support
 
@@ -43,11 +38,11 @@ The client currently only supports the REST API although I do want to add suppor
 | Realm | API          | Verb   | Endpoint                                              |        Support        |
 |:------|:-------------|:-------|:------------------------------------------------------|:---------------------:|
 | REST  | Search       | GET    | /shodan/host/{ip}                                     | :heavy_division_sign: |
-| REST  | Search       | GET    | /shodan/host/count                                    |                       |
-| REST  | Search       | GET    | /shodan/host/search                                   |                       |
+| REST  | Search       | GET    | /shodan/host/count                                    |  :heavy_check_mark:   |
+| REST  | Search       | GET    | /shodan/host/search                                   | :heavy_division_sign: |
 | REST  | Search       | GET    | /shodan/host/search/facets                            |  :heavy_check_mark:   |
 | REST  | Search       | GET    | /shodan/host/search/filters                           |  :heavy_check_mark:   |
-| REST  | Search       | GET    | /shodan/host/search/tokens                            |                       |
+| REST  | Search       | GET    | /shodan/host/search/tokens                            | :heavy_division_sign: |
 | REST  | Scanning     | GET    | /shodan/ports                                         |  :heavy_check_mark:   |
 | REST  | Scanning     | GET    | /shodan/protocols                                     |  :heavy_check_mark:   |
 | REST  | Scanning     | POST   | /shodan/scan                                          |                       |
