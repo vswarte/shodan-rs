@@ -15,6 +15,7 @@ pub mod search;
 pub mod utility;
 pub mod builders;
 pub mod error;
+pub mod search_result;
 
 const BASE_API_URL: &'static str = "https://api.shodan.io";
 

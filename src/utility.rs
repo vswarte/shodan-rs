@@ -32,14 +32,14 @@ pub mod tests {
     #[test]
     fn can_get_my_ip() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.get_my_ip().unwrap();
+        client.get_my_ip().unwrap();
 
     }
 
     #[test]
     fn can_get_http_headers() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.get_http_headers().unwrap();
+        client.get_http_headers().unwrap();
 
     }
 }

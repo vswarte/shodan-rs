@@ -4,6 +4,7 @@ use crate::{add_optional_parameter, ShodanClient};
 use reqwest::Error;
 use serde::Deserialize;
 use std::collections::HashMap;
+use crate::search_result::SearchResult;
 
 trait Search {
     fn search_host_ip(
@@ -16,15 +17,15 @@ trait Search {
     fn search_host_search(
         &self,
         query: String,
-        facets: Option<String>,
+        facets: Option<&str>,
         page: Option<i32>,
         minifi: Option<bool>,
-    ) -> Result<SearchResponse, ShodanError>;
+    ) -> Result<SearchResult, ShodanError>;
 
     fn search_host_count(
         &self,
         query: String,
-        facets: Option<String>,
+        facets: Option<&str>,
     ) -> Result<CountResponse, ShodanError>;
 
     fn search_host_facets(&self) -> Result<Vec<String>, ShodanError>;
@@ -69,12 +70,6 @@ pub struct Match {
     pub hostnames: Vec<String>,
 }
 
-#[derive(Deserialize, Debug)]
-pub struct SearchResponse {
-    pub matches: Vec<Match>,
-    pub total: u32,
-    pub facets: Option<HashMap<String, Vec<Facet>>>,
-}
 
 #[derive(Deserialize, Debug)]
 pub struct CountResponse {
@@ -113,10 +108,10 @@ impl Search for ShodanClient {
     fn search_host_search(
         &self,
         query: String,
-        facets: Option<String>,
+        facets: Option<&str>,
         page: Option<i32>,
         minifi: Option<bool>,
-    ) -> Result<SearchResponse, ShodanError> {
+    ) -> Result<SearchResult, ShodanError> {
         let mut parameters = HashMap::from([(String::from("query"), query)]);
         add_optional_parameter("facets", facets, &mut parameters);
         add_optional_parameter("page", page, &mut parameters);
@@ -128,7 +123,7 @@ impl Search for ShodanClient {
     fn search_host_count(
         &self,
         query: String,
-        facets: Option<String>,
+        facets: Option<&str>,
     ) -> Result<CountResponse, ShodanError> {
         let mut parameters = HashMap::from([(String::from("query"), query)]);
         add_optional_parameter("facets", facets, &mut parameters);
@@ -190,7 +185,7 @@ pub mod tests {
     fn can_get_google_count_with_facets() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client
-            .search_host_count(String::from("google"), Some("os,country".to_string()))
+            .search_host_count(String::from("google"), Some("os,country"))
             .unwrap();
     }
 
@@ -198,8 +193,19 @@ pub mod tests {
     fn can_get_google_search() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client
-            .search_host_search(String::from("google"), None, None, None)
-            .unwrap();
+            .search_host_search(String::from("google"), None, None, None);
+
+        match response {
+            Ok(r) => { println!("{:?}", r) }
+            Err(e) => {
+                match e {
+                    ShodanError::ShodanClientError(_) => {panic!("lol wut?")}
+                    ShodanError::ReqwestError(e) => { panic!("Error: {:?}", e)}
+                }
+            }
+        }
+
+
     }
 
     #[test]

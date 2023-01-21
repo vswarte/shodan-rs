@@ -3,7 +3,7 @@ use crate::error::ShodanError::*;
 #[derive(Debug)]
 pub enum ShodanError {
     ShodanClientError(String),
-    ReqwestError(reqwest::Error)
+    ReqwestError(reqwest::Error),
 }
 
 impl From<reqwest::Error> for ShodanError {
