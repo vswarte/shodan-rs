@@ -1,16 +1,38 @@
+use crate::error::ShodanError;
 use crate::response::ShodanClientResponse;
-use crate::ShodanClient;
+use crate::search_result::SearchResult;
+use crate::{add_optional_parameter, ShodanClient};
+use reqwest::Error;
 use serde::Deserialize;
+use std::collections::HashMap;
 
 trait Search {
-    fn get_search_host_ip(
+    fn search_host_ip(
         &self,
         ip: String,
-    ) -> Result<ShodanClientResponse<SearchHostIpResponse>, reqwest::Error>;
+        history: Option<bool>,
+        minifi: Option<bool>,
+    ) -> Result<SearchHostIpResponse, ShodanError>;
 
-    fn get_search_host_facets(&self) -> Result<ShodanClientResponse<Vec<String>>, reqwest::Error>;
+    fn search_host_search(
+        &self,
+        query: String,
+        facets: Option<&str>,
+        page: Option<i32>,
+        minifi: Option<bool>,
+    ) -> Result<SearchResult, ShodanError>;
 
-    fn get_search_host_filters(&self) -> Result<ShodanClientResponse<Vec<String>>, reqwest::Error>;
+    fn search_host_count(
+        &self,
+        query: String,
+        facets: Option<&str>,
+    ) -> Result<CountResponse, ShodanError>;
+
+    fn search_host_facets(&self) -> Result<Vec<String>, ShodanError>;
+
+    fn search_host_filters(&self) -> Result<Vec<String>, ShodanError>;
+
+    fn search_host_tokens(&self, query: String) -> Result<TokenResponse, ShodanError>;
 }
 
 #[derive(Deserialize, Debug)]
@@ -40,63 +62,159 @@ pub struct SearchHostIpResponse {
     pub area_code: Option<String>,
 }
 
+#[derive(Deserialize, Debug)]
+pub struct Match {
+    pub asn: Option<String>,
+    pub os: Option<String>,
+    pub domains: Vec<String>,
+    pub hostnames: Vec<String>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct CountResponse {
+    pub total: u32,
+    pub facets: Option<HashMap<String, Vec<Facet>>>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct TokenResponse {
+    pub attributes: HashMap<String, Vec<i32>>,
+    pub errors: Vec<String>,
+    pub string: String,
+    pub filters: Vec<String>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct Facet {
+    pub count: u32,
+    pub value: String,
+}
+
 impl Search for ShodanClient {
-    fn get_search_host_ip(
+    fn search_host_ip(
         &self,
         ip: String,
-    ) -> Result<ShodanClientResponse<SearchHostIpResponse>, reqwest::Error> {
-        Self::fetch(self.build_request_url(format!("/shodan/host/{ip}").as_str(), None))
+        history: Option<bool>,
+        minifi: Option<bool>,
+    ) -> Result<SearchHostIpResponse, ShodanError> {
+        let mut parameters = HashMap::new();
+        add_optional_parameter("history", history, &mut parameters);
+        add_optional_parameter("minifi", minifi, &mut parameters);
+
+        Self::fetch(self.build_request_url(format!("/shodan/host/{ip}").as_str(), Some(parameters)))
     }
 
-    fn get_search_host_facets(&self) -> Result<ShodanClientResponse<Vec<String>>, reqwest::Error> {
+    fn search_host_search(
+        &self,
+        query: String,
+        facets: Option<&str>,
+        page: Option<i32>,
+        minifi: Option<bool>,
+    ) -> Result<SearchResult, ShodanError> {
+        let mut parameters = HashMap::from([(String::from("query"), query)]);
+        add_optional_parameter("facets", facets, &mut parameters);
+        add_optional_parameter("page", page, &mut parameters);
+        add_optional_parameter("minifi", minifi, &mut parameters);
+
+        Self::fetch(self.build_request_url("/shodan/host/search", Some(parameters)))
+    }
+
+    fn search_host_count(
+        &self,
+        query: String,
+        facets: Option<&str>,
+    ) -> Result<CountResponse, ShodanError> {
+        let mut parameters = HashMap::from([(String::from("query"), query)]);
+        add_optional_parameter("facets", facets, &mut parameters);
+
+        Self::fetch(self.build_request_url("/shodan/host/count", Some(parameters)))
+    }
+
+    fn search_host_facets(&self) -> Result<Vec<String>, ShodanError> {
         Self::fetch(self.build_request_url("/shodan/host/search/facets", None))
     }
 
-    fn get_search_host_filters(&self) -> Result<ShodanClientResponse<Vec<String>>, reqwest::Error> {
+    fn search_host_filters(&self) -> Result<Vec<String>, ShodanError> {
         Self::fetch(self.build_request_url("/shodan/host/search/filters", None))
+    }
+
+    fn search_host_tokens(&self, query: String) -> Result<TokenResponse, ShodanError> {
+        let mut parameters = HashMap::from([(String::from("query"), query)]);
+
+        Self::fetch(self.build_request_url("/shodan/host/search/tokens", Some(parameters)))
     }
 }
 
 #[cfg(test)]
 pub mod tests {
     use crate::response::ShodanClientResponse;
-    use crate::search::Search;
+    use crate::search::*;
     use crate::tests::get_test_api_key;
     use crate::ShodanClient;
 
     #[test]
     fn can_get_google_host_ip() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.get_search_host_ip(String::from("8.8.8.8")).unwrap();
-
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
+        let response = client
+            .search_host_ip(String::from("8.8.8.8"), None, None)
+            .unwrap();
     }
 
     #[test]
     fn can_get_host_facets() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.get_search_host_facets().unwrap();
-
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
+        let response = client.search_host_facets().unwrap();
     }
 
     #[test]
     fn can_get_host_filters() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.get_search_host_filters().unwrap();
+        let response = client.search_host_filters().unwrap();
+    }
 
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
+    #[test]
+    fn can_get_google_count() {
+        let client = ShodanClient::new(get_test_api_key());
+        let response = client
+            .search_host_count(String::from("google"), None)
+            .unwrap();
+    }
+
+    #[test]
+    fn can_get_google_count_with_facets() {
+        let client = ShodanClient::new(get_test_api_key());
+        let response = client
+            .search_host_count(String::from("google"), Some("os,country"))
+            .unwrap();
+    }
+
+    #[test]
+    fn can_get_google_search() {
+        let client = ShodanClient::new(get_test_api_key());
+        let response = client.search_host_search(String::from("google"), None, None, None);
+
+        match response {
+            Ok(r) => {
+                println!("{:?}", r)
+            }
+            Err(e) => match e {
+                ShodanError::ShodanClientError(_) => {
+                    panic!("lol wut?")
+                }
+                ShodanError::ReqwestError(e) => {
+                    panic!("Error: {:?}", e)
+                }
+            },
+        }
+    }
+
+    #[test]
+    fn can_get_raspbian_tokens() {
+        let client = ShodanClient::new(get_test_api_key());
+        let response = client
+            .search_host_tokens(String::from("Raspbian port:22"))
+            .unwrap();
+
+        println!("{:?}", response)
     }
 }

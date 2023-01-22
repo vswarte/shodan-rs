@@ -1,3 +1,4 @@
+use crate::error::ShodanError;
 use crate::response::ShodanClientResponse;
 use crate::ShodanClient;
 use serde::Deserialize;
@@ -23,11 +24,11 @@ pub struct ApiInfoResponseUsageLimits {
 }
 
 trait ApiInfo {
-    fn get_api_info(&self) -> Result<ShodanClientResponse<ApiInfoResponse>, reqwest::Error>;
+    fn get_api_info(&self) -> Result<ApiInfoResponse, ShodanError>;
 }
 
 impl ApiInfo for ShodanClient {
-    fn get_api_info(&self) -> Result<ShodanClientResponse<ApiInfoResponse>, reqwest::Error> {
+    fn get_api_info(&self) -> Result<ApiInfoResponse, ShodanError> {
         Self::fetch(self.build_request_url("/api-info", None))
     }
 }
@@ -43,11 +44,5 @@ pub mod tests {
     fn can_get_api_info() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_api_info().unwrap();
-
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
     }
 }

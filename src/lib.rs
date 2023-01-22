@@ -2,6 +2,8 @@ use crate::response::ShodanClientResponse;
 use serde::Deserialize;
 use std::collections::HashMap;
 use url::Url;
+use crate::error::ShodanError;
+use crate::error::ShodanError::ShodanClientError;
 
 pub mod account;
 pub mod api_status;
@@ -11,6 +13,9 @@ pub mod response;
 pub mod scanning;
 pub mod search;
 pub mod utility;
+pub mod builders;
+pub mod error;
+pub mod search_result;
 
 const BASE_API_URL: &'static str = "https://api.shodan.io";
 
@@ -44,8 +49,17 @@ impl ShodanClient {
 
     fn fetch<T: for<'a> Deserialize<'a>>(
         url: String,
-    ) -> Result<ShodanClientResponse<T>, reqwest::Error> {
-        Ok(reqwest::blocking::get(url)?.json::<ShodanClientResponse<T>>()?)
+    ) -> Result<T, ShodanError> {
+        match reqwest::blocking::get(url)?.json::<ShodanClientResponse<T>>()? {
+            ShodanClientResponse::Error(e) => { Err(ShodanClientError(format!("{} response: {}", e.error, "")))}
+            ShodanClientResponse::Response(r) => { Ok(r) }
+        }
+    }
+}
+
+pub fn add_optional_parameter(name: &str, param: Option<impl ToString>, map: &mut HashMap<String, String>) {
+    if let Some(unwrapped) = param {
+        map.insert(name.into(), unwrapped.to_string());
     }
 }
 

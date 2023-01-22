@@ -1,21 +1,27 @@
+use crate::error::ShodanError;
 use crate::response::ShodanClientResponse;
-use crate::ShodanClient;
+use crate::{add_optional_parameter, ShodanClient};
 use serde::Deserialize;
 use std::collections::HashMap;
 
 pub trait Directory {
-    fn get_directory_query(
+    fn directory_query(
         &self,
-    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, reqwest::Error>;
+        page: Option<i32>,
+        sort: Option<String>,
+        order: Option<String>,
+    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError>;
 
-    fn get_directory_query_search(
+    fn directory_query_search(
         &self,
         query: String,
-    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, reqwest::Error>;
+        page: Option<i32>,
+    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError>;
 
-    fn get_directory_query_tags(
+    fn directory_query_tags(
         &self,
-    ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, reqwest::Error>;
+        size: Option<i32>,
+    ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, ShodanError>;
 }
 
 #[derive(Deserialize, Debug)]
@@ -47,24 +53,38 @@ pub struct DirectoryQueryTagsResponseMatch {
 }
 
 impl Directory for ShodanClient {
-    fn get_directory_query(
+    fn directory_query(
         &self,
-    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, reqwest::Error> {
-        Self::fetch(self.build_request_url("/shodan/query", None))
+        page: Option<i32>,
+        sort: Option<String>,
+        order: Option<String>,
+    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError> {
+        let mut parameters = HashMap::new();
+        add_optional_parameter("page", page, &mut parameters);
+        add_optional_parameter("sort", sort, &mut parameters);
+        add_optional_parameter("order", order, &mut parameters);
+
+        Self::fetch(self.build_request_url("/shodan/query", Some(parameters)))
     }
 
-    fn get_directory_query_search(
+    fn directory_query_search(
         &self,
         query: String,
-    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, reqwest::Error> {
-        let parameters = HashMap::from([(String::from("query"), query)]);
+        page: Option<i32>,
+    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError> {
+        let mut parameters = HashMap::from([(String::from("query"), query)]);
+        add_optional_parameter("page", page, &mut parameters);
 
         Self::fetch(self.build_request_url("/shodan/query/search", Some(parameters)))
     }
 
-    fn get_directory_query_tags(
+    fn directory_query_tags(
         &self,
-    ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, reqwest::Error> {
+        size: Option<i32>,
+    ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, ShodanError> {
+        let mut parameters = HashMap::new();
+        add_optional_parameter("size", size, &mut parameters);
+
         Self::fetch(self.build_request_url("/shodan/query/tags", None))
     }
 }
@@ -79,38 +99,20 @@ pub mod tests {
     #[test]
     fn can_get_directory_query() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.get_directory_query().unwrap();
-
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
+        let response = client.directory_query(None, None, None).unwrap();
     }
 
     #[test]
     fn can_get_directory_query_search() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client
-            .get_directory_query_search(String::from("webcam"))
+            .directory_query_search(String::from("webcam"), None)
             .unwrap();
-
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
     }
 
     #[test]
     fn can_get_directory_query_tags() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.get_directory_query_tags().unwrap();
-
-        assert!(
-            matches!(response, ShodanClientResponse::Response { .. }),
-            "Response was {:?}",
-            response
-        );
+        let response = client.directory_query_tags(None).unwrap();
     }
 }
