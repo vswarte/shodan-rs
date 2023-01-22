@@ -1,7 +1,7 @@
+use crate::error::ShodanError;
 use crate::response::ShodanClientResponse;
 use crate::ShodanClient;
 use std::collections::HashMap;
-use crate::error::ShodanError;
 
 trait Scanning {
     fn get_scanning_ports(&self) -> Result<ShodanClientResponse<Vec<u16>>, ShodanError>;
@@ -33,13 +33,11 @@ pub mod tests {
     fn can_get_ports() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_scanning_ports().unwrap();
-
     }
 
     #[test]
     fn can_get_protocols() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_scanning_protocols().unwrap();
-
     }
 }

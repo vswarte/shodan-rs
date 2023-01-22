@@ -1,7 +1,7 @@
+use crate::error::ShodanError;
 use crate::response::ShodanClientResponse;
 use crate::ShodanClient;
 use serde::Deserialize;
-use crate::error::ShodanError;
 
 #[derive(Deserialize, Debug)]
 pub struct ApiInfoResponse {
@@ -44,6 +44,5 @@ pub mod tests {
     fn can_get_api_info() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.get_api_info().unwrap();
-
     }
 }

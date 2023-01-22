@@ -1,8 +1,8 @@
+use crate::error::ShodanError;
 use crate::response::ShodanClientResponse;
 use crate::{add_optional_parameter, ShodanClient};
 use serde::Deserialize;
 use std::collections::HashMap;
-use crate::error::ShodanError;
 
 #[derive(Deserialize, Debug)]
 pub struct DnsDomainResponse {
@@ -36,10 +36,7 @@ trait Dns {
         hostnames: Vec<String>,
     ) -> Result<HashMap<String, Option<String>>, ShodanError>;
 
-    fn dns_reverse(
-        &self,
-        ips: Vec<String>,
-    ) -> Result<HashMap<String, Vec<String>>, ShodanError>;
+    fn dns_reverse(&self, ips: Vec<String>) -> Result<HashMap<String, Vec<String>>, ShodanError>;
 }
 
 impl Dns for ShodanClient {
@@ -69,10 +66,7 @@ impl Dns for ShodanClient {
         Self::fetch(self.build_request_url("/dns/resolve", Some(parameters)))
     }
 
-    fn dns_reverse(
-        &self,
-        ips: Vec<String>,
-    ) -> Result<HashMap<String, Vec<String>>, ShodanError> {
+    fn dns_reverse(&self, ips: Vec<String>) -> Result<HashMap<String, Vec<String>>, ShodanError> {
         let parameters = HashMap::from([(String::from("ips"), ips.join(","))]);
 
         Self::fetch(self.build_request_url("/dns/reverse", Some(parameters)))
@@ -92,8 +86,6 @@ pub mod tests {
         let response = client
             .dns_domain(String::from("google.com"), None, None, None)
             .unwrap();
-
-
     }
 
     #[test]
@@ -105,7 +97,6 @@ pub mod tests {
                 String::from("facebook.com"),
             ])
             .unwrap();
-
     }
 
     #[test]
@@ -114,6 +105,5 @@ pub mod tests {
         let response = client
             .dns_reverse(vec![String::from("8.8.8.8"), String::from("1.1.1.1")])
             .unwrap();
-
     }
 }

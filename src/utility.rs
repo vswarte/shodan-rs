@@ -1,13 +1,11 @@
+use crate::error::ShodanError;
 use crate::response::ShodanClientResponse;
 use crate::ShodanClient;
 use std::collections::HashMap;
-use crate::error::ShodanError;
 
 trait Utility {
     fn get_my_ip(&self) -> Result<String, ShodanError>;
-    fn get_http_headers(
-        &self,
-    ) -> Result<HashMap<String, String>, ShodanError>;
+    fn get_http_headers(&self) -> Result<HashMap<String, String>, ShodanError>;
 }
 
 impl Utility for ShodanClient {
@@ -15,9 +13,7 @@ impl Utility for ShodanClient {
         Self::fetch(self.build_request_url("/tools/myip", None))
     }
 
-    fn get_http_headers(
-        &self,
-    ) -> Result<HashMap<String, String>, ShodanError> {
+    fn get_http_headers(&self) -> Result<HashMap<String, String>, ShodanError> {
         Self::fetch(self.build_request_url("/tools/httpheaders", None))
     }
 }
@@ -33,13 +29,11 @@ pub mod tests {
     fn can_get_my_ip() {
         let client = ShodanClient::new(get_test_api_key());
         client.get_my_ip().unwrap();
-
     }
 
     #[test]
     fn can_get_http_headers() {
         let client = ShodanClient::new(get_test_api_key());
         client.get_http_headers().unwrap();
-
     }
 }

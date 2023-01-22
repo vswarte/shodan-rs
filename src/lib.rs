@@ -51,7 +51,7 @@ impl ShodanClient {
         url: String,
     ) -> Result<T, ShodanError> {
         match reqwest::blocking::get(url)?.json::<ShodanClientResponse<T>>()? {
-            ShodanClientResponse::Error(e) => { Err(ShodanClientError(e.error))}
+            ShodanClientResponse::Error(e) => { Err(ShodanClientError(format!("{} response: {}", e.error, "")))}
             ShodanClientResponse::Response(r) => { Ok(r) }
         }
     }

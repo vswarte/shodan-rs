@@ -1,10 +1,10 @@
 use crate::error::ShodanError;
 use crate::response::ShodanClientResponse;
+use crate::search_result::SearchResult;
 use crate::{add_optional_parameter, ShodanClient};
 use reqwest::Error;
 use serde::Deserialize;
 use std::collections::HashMap;
-use crate::search_result::SearchResult;
 
 trait Search {
     fn search_host_ip(
@@ -69,7 +69,6 @@ pub struct Match {
     pub domains: Vec<String>,
     pub hostnames: Vec<String>,
 }
-
 
 #[derive(Deserialize, Debug)]
 pub struct CountResponse {
@@ -192,20 +191,21 @@ pub mod tests {
     #[test]
     fn can_get_google_search() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client
-            .search_host_search(String::from("google"), None, None, None);
+        let response = client.search_host_search(String::from("google"), None, None, None);
 
         match response {
-            Ok(r) => { println!("{:?}", r) }
-            Err(e) => {
-                match e {
-                    ShodanError::ShodanClientError(_) => {panic!("lol wut?")}
-                    ShodanError::ReqwestError(e) => { panic!("Error: {:?}", e)}
-                }
+            Ok(r) => {
+                println!("{:?}", r)
             }
+            Err(e) => match e {
+                ShodanError::ShodanClientError(_) => {
+                    panic!("lol wut?")
+                }
+                ShodanError::ReqwestError(e) => {
+                    panic!("Error: {:?}", e)
+                }
+            },
         }
-
-
     }
 
     #[test]

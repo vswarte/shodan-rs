@@ -1,8 +1,8 @@
+use crate::error::ShodanError;
 use crate::response::ShodanClientResponse;
 use crate::{add_optional_parameter, ShodanClient};
 use serde::Deserialize;
 use std::collections::HashMap;
-use crate::error::ShodanError;
 
 pub trait Directory {
     fn directory_query(
@@ -100,7 +100,6 @@ pub mod tests {
     fn can_get_directory_query() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.directory_query(None, None, None).unwrap();
-
     }
 
     #[test]
@@ -109,13 +108,11 @@ pub mod tests {
         let response = client
             .directory_query_search(String::from("webcam"), None)
             .unwrap();
-
     }
 
     #[test]
     fn can_get_directory_query_tags() {
         let client = ShodanClient::new(get_test_api_key());
         let response = client.directory_query_tags(None).unwrap();
-
     }
 }

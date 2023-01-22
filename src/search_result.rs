@@ -1,7 +1,7 @@
-use serde::{Deserialize};
-use std::collections::HashMap;
-use serde::de::Visitor;
 use crate::search::Facet;
+use serde::de::Visitor;
+use serde::Deserialize;
+use std::collections::HashMap;
 
 #[derive(Debug, Deserialize)]
 pub struct SearchResult {
@@ -259,4 +259,3 @@ pub struct Vuln {
     cvss: Option<f64>,
     summary: String,
 }
-
