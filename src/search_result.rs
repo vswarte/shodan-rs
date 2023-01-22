@@ -5,257 +5,257 @@ use std::collections::HashMap;
 
 #[derive(Debug, Deserialize)]
 pub struct SearchResult {
-    matches: Vec<Match>,
-    total: i64,
+    pub matches: Vec<Match>,
+    pub total: i64,
     pub facets: Option<HashMap<String, Vec<Facet>>>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Match {
-    hash: i64,
-    asn: String,
-    http: Option<Http>,
-    os: Option<String>,
-    tags: Option<Vec<String>>,
-    timestamp: String,
-    isp: String,
-    transport: String,
+    pub hash: i64,
+    pub asn: String,
+    pub http: Option<Http>,
+    pub os: Option<String>,
+    pub tags: Option<Vec<String>>,
+    pub timestamp: String,
+    pub isp: String,
+    pub transport: String,
     #[serde(rename = "_shodan")]
-    shodan: Shodan,
-    ssl: Option<Ssl>,
-    cloud: Option<Cloud>,
-    hostnames: Vec<String>,
-    location: LocationClass,
-    ip: Option<i64>,
-    domains: Vec<String>,
-    org: String,
-    data: String,
-    port: i64,
-    ip_str: String,
-    product: Option<String>,
-    cpe23: Option<Vec<String>>,
-    cpe: Option<Vec<String>>,
-    version: Option<String>,
-    // mysql: Option<Mysql>,
-    info: Option<String>,
-    // vulns: Option<HashMap<String, Vuln>>,
-    ipv6: Option<String>,
+    pub shodan: Shodan,
+    pub ssl: Option<Ssl>,
+    pub cloud: Option<Cloud>,
+    pub hostnames: Vec<String>,
+    pub location: LocationClass,
+    pub ip: Option<i64>,
+    pub domains: Vec<String>,
+    pub org: String,
+    pub data: String,
+    pub port: i64,
+    pub ip_str: String,
+    pub product: Option<String>,
+    pub cpe23: Option<Vec<String>>,
+    pub cpe: Option<Vec<String>>,
+    pub version: Option<String>,
+    //pub mysql: Option<Mysql>,
+    pub info: Option<String>,
+    //pub vulns: Option<HashMap<String, Vuln>>,
+    pub ipv6: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Cloud {
-    region: Option<String>,
-    service: Option<String>,
-    provider: String,
+    pub region: Option<String>,
+    pub service: Option<String>,
+    pub provider: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Http {
-    status: i64,
-    robots_hash: Option<i64>,
-    redirects: Vec<Redirect>,
-    securitytxt: Option<String>,
-    title: Option<String>,
-    sitemap_hash: Option<i64>,
-    robots: Option<String>,
-    server: Option<String>,
-    headers_hash: i64,
-    host: String,
-    html: String,
-    location: String,
-    components: Option<HashMap<String, Component>>,
-    html_hash: i64,
-    sitemap: Option<String>,
-    securitytxt_hash: Option<String>,
-    favicon: Option<Favicon>,
-    waf: Option<String>,
+    pub status: i64,
+    pub robots_hash: Option<i64>,
+    pub redirects: Vec<Redirect>,
+    pub securitytxt: Option<String>,
+    pub title: Option<String>,
+    pub sitemap_hash: Option<i64>,
+    pub robots: Option<String>,
+    pub server: Option<String>,
+    pub headers_hash: i64,
+    pub host: String,
+    pub html: String,
+    pub location: String,
+    pub components: Option<HashMap<String, Component>>,
+    pub html_hash: i64,
+    pub sitemap: Option<String>,
+    pub securitytxt_hash: Option<String>,
+    pub favicon: Option<Favicon>,
+    pub waf: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Component {
-    categories: Vec<String>,
+    pub categories: Vec<String>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Favicon {
-    hash: i64,
-    data: String,
-    location: String,
+    pub hash: i64,
+    pub data: String,
+    pub location: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Redirect {
-    host: String,
-    data: String,
-    location: String,
-    html: Option<String>,
+    pub host: String,
+    pub data: String,
+    pub location: String,
+    pub html: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct LocationClass {
-    city: String,
-    region_code: String,
-    area_code: Option<String>,
-    longitude: f64,
-    latitude: f64,
-    country_code: String,
-    country_name: String,
+    pub city: String,
+    pub region_code: String,
+    pub area_code: Option<String>,
+    pub longitude: f64,
+    pub latitude: f64,
+    pub country_code: String,
+    pub country_name: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Mysql {
-    authentication_plugin: String,
-    capabilities: i64,
-    server_status: String,
-    thread_id: i64,
-    version: String,
-    extended_server_capabilities: i64,
-    protocol_version: i64,
-    server_language: i64,
+    pub authentication_plugin: String,
+    pub capabilities: i64,
+    pub server_status: String,
+    pub thread_id: i64,
+    pub version: String,
+    pub extended_server_capabilities: i64,
+    pub protocol_version: i64,
+    pub server_language: i64,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Shodan {
-    region: String,
-    ptr: Option<bool>,
-    module: String,
-    id: String,
-    options: HashMap<String, String>,
-    crawler: String,
+    pub region: String,
+    pub ptr: Option<bool>,
+    pub module: String,
+    pub id: String,
+    pub options: HashMap<String, String>,
+    pub crawler: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Ssl {
-    chain_sha256: Vec<String>,
-    jarm: String,
-    chain: Vec<String>,
-    dhparams: Option<Dhparams>,
-    versions: Vec<String>,
-    acceptable_cas: Vec<String>,
-    tlsext: Vec<Tlsext>,
+    pub chain_sha256: Vec<String>,
+    pub jarm: String,
+    pub chain: Vec<String>,
+    pub dhparams: Option<Dhparams>,
+    pub versions: Vec<String>,
+    pub acceptable_cas: Vec<String>,
+    pub tlsext: Vec<Tlsext>,
     #[serde(rename = "ja3s")]
-    ja3_s: String,
-    cert: Cert,
-    cipher: Cipher,
-    trust: Trust,
-    handshake_states: Vec<String>,
-    alpn: Vec<String>,
-    ocsp: Ocsp,
+    pub ja3_s: String,
+    pub cert: Cert,
+    pub cipher: Cipher,
+    pub trust: Trust,
+    pub handshake_states: Vec<String>,
+    pub alpn: Vec<String>,
+    pub ocsp: Ocsp,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Cert {
-    sig_alg: String,
-    issued: String,
-    expires: String,
-    expired: bool,
-    version: i64,
-    extensions: Vec<Extension>,
-    fingerprint: Fingerprint,
-    serial: f64,
-    subject: Issuer,
-    pubkey: Pubkey,
-    issuer: Issuer,
+    pub sig_alg: String,
+    pub issued: String,
+    pub expires: String,
+    pub expired: bool,
+    pub version: i64,
+    pub extensions: Vec<Extension>,
+    pub fingerprint: Fingerprint,
+    pub serial: f64,
+    pub subject: Issuer,
+    pub pubkey: Pubkey,
+    pub issuer: Issuer,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Extension {
-    critical: Option<bool>,
-    data: String,
-    name: String,
+    pub critical: Option<bool>,
+    pub data: String,
+    pub name: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Fingerprint {
-    sha256: String,
-    sha1: String,
+    pub sha256: String,
+    pub sha1: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Issuer {
     #[serde(rename = "C")]
-    c: Option<String>,
+    pub c: Option<String>,
     #[serde(rename = "CN")]
-    cn: String,
+    pub cn: String,
     #[serde(rename = "O")]
-    o: Option<String>,
+    pub o: Option<String>,
     #[serde(rename = "L")]
-    l: Option<String>,
+    pub l: Option<String>,
     #[serde(rename = "ST")]
-    st: Option<String>,
+    pub st: Option<String>,
     #[serde(rename = "OU")]
-    ou: Option<String>,
+    pub ou: Option<String>,
     #[serde(rename = "emailAddress")]
-    email_address: Option<String>,
+    pub email_address: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Pubkey {
     #[serde(rename = "type")]
-    pubkey_type: String,
-    bits: i64,
+    pub pubkey_type: String,
+    pub bits: i64,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Cipher {
-    version: String,
-    bits: i64,
-    name: String,
+    pub version: String,
+    pub bits: i64,
+    pub name: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Dhparams {
-    prime: String,
-    public_key: String,
-    bits: i64,
-    generator: i64,
-    fingerprint: String,
+    pub prime: String,
+    pub public_key: String,
+    pub bits: i64,
+    pub generator: i64,
+    pub fingerprint: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Ocsp {
-    version: Option<String>,
-    response_status: Option<String>,
-    responder_id: Option<String>,
-    cert_status: Option<String>,
-    produced_at: Option<String>,
-    signature_algorithm: Option<String>,
-    next_update: Option<String>,
-    this_update: Option<String>,
-    certificate_id: Option<CertificateId>,
+    pub version: Option<String>,
+    pub response_status: Option<String>,
+    pub responder_id: Option<String>,
+    pub cert_status: Option<String>,
+    pub produced_at: Option<String>,
+    pub signature_algorithm: Option<String>,
+    pub next_update: Option<String>,
+    pub this_update: Option<String>,
+    pub certificate_id: Option<CertificateId>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct CertificateId {
-    hash_algorithm: String,
-    issuer_name_hash: String,
-    issuer_name_key: String,
-    serial_number: String,
+    pub hash_algorithm: String,
+    pub issuer_name_hash: String,
+    pub issuer_name_key: String,
+    pub serial_number: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Tlsext {
-    id: i64,
-    name: String,
+    pub id: i64,
+    pub name: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Trust {
-    revoked: bool,
-    browser: Option<Browser>,
+    pub revoked: bool,
+    pub browser: Option<Browser>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Browser {
-    mozilla: bool,
-    apple: bool,
-    microsoft: bool,
+    pub mozilla: bool,
+    pub apple: bool,
+    pub microsoft: bool,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Vuln {
-    verified: bool,
-    references: Vec<String>,
-    cvss: Option<f64>,
-    summary: String,
+    pub verified: bool,
+    pub references: Vec<String>,
+    pub cvss: Option<f64>,
+    pub summary: String,
 }
