@@ -1,7 +1,10 @@
 [package]
 name = "shodan-client"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2021"
+license = "MIT"
+description = "Shodan client"
+repository = "https://github.com/vswarte/shodan-rs"
 
 [dependencies]
 url = "2.3"
