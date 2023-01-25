@@ -2,7 +2,7 @@
 name = "shodan-client"
 version = "0.0.1"
 edition = "2021"
-license = "MIT"
+license = "MIT OR Apache-2.0"
 description = "Shodan client"
 repository = "https://github.com/vswarte/shodan-rs"
 
