@@ -22,7 +22,7 @@ pub struct DnsDomainDataItem {
     pub last_seen: String,
 }
 
-trait Dns {
+pub trait Dns {
     fn dns_domain(
         &self,
         domain: String,

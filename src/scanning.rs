@@ -3,7 +3,7 @@ use crate::response::ShodanClientResponse;
 use crate::ShodanClient;
 use std::collections::HashMap;
 
-trait Scanning {
+pub trait Scanning {
     fn get_scanning_ports(&self) -> Result<ShodanClientResponse<Vec<u16>>, ShodanError>;
     fn get_scanning_protocols(
         &self,

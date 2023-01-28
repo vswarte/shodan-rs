@@ -6,7 +6,7 @@ use reqwest::Error;
 use serde::Deserialize;
 use std::collections::HashMap;
 
-trait Search {
+pub trait Search {
     fn search_host_ip(
         &self,
         ip: String,

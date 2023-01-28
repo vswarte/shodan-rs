@@ -23,7 +23,7 @@ pub struct ApiInfoResponseUsageLimits {
     pub monitored_ips: i32,
 }
 
-trait ApiInfo {
+pub trait ApiInfo {
     fn get_api_info(&self) -> Result<ApiInfoResponse, ShodanError>;
 }
 

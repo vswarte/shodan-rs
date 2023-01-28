@@ -3,7 +3,7 @@ use crate::response::ShodanClientResponse;
 use crate::ShodanClient;
 use std::collections::HashMap;
 
-trait Utility {
+pub trait Utility {
     fn get_my_ip(&self) -> Result<String, ShodanError>;
     fn get_http_headers(&self) -> Result<HashMap<String, String>, ShodanError>;
 }
