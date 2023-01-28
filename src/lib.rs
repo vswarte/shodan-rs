@@ -46,9 +46,15 @@ impl ShodanClient {
         return url.to_string();
     }
 
-    fn fetch<T: for<'a> Deserialize<'a>>(url: String) -> Result<T, ShodanError> {
-        let response = reqwest::blocking::get(url);
-        match response?.json::<ShodanClientResponse<T>>()? {
+    async fn fetch<T: for<'a> Deserialize<'a>>(url: String) -> Result<T, ShodanError> {
+        let response = reqwest::get(url)
+            .await
+            .map_err(|x| ShodanError::ReqwestError(x))?
+            .json::<ShodanClientResponse<T>>()
+            .await
+            .map_err(|x| ShodanError::ReqwestError(x))?;
+
+        match response {
             ShodanClientResponse::Error(e) => {
                 Err(ShodanClientError(format!("Error response: {}", e.error)))
             }

@@ -1,17 +1,19 @@
 use serde::Deserialize;
+use async_trait::async_trait;
 use std::collections::HashMap;
 use crate::error::ShodanError;
 use crate::{add_optional_parameter, ShodanClient};
 
+#[async_trait]
 pub trait Search {
-    fn host_ip(
+    async fn host_ip(
         &self,
         ip: String,
         history: Option<bool>,
         minifi: Option<bool>,
     ) -> Result<SearchHostIpResponse, ShodanError>;
 
-    fn host_search(
+    async fn host_search(
         &self,
         query: String,
         facets: Option<&str>,
@@ -19,17 +21,17 @@ pub trait Search {
         minifi: Option<bool>,
     ) -> Result<SearchResult, ShodanError>;
 
-    fn host_count(
+    async fn host_count(
         &self,
         query: String,
         facets: Option<&str>,
     ) -> Result<CountResponse, ShodanError>;
 
-    fn host_facets(&self) -> Result<Vec<String>, ShodanError>;
+    async fn host_facets(&self) -> Result<Vec<String>, ShodanError>;
 
-    fn host_filters(&self) -> Result<Vec<String>, ShodanError>;
+    async fn host_filters(&self) -> Result<Vec<String>, ShodanError>;
 
-    fn host_tokens(&self, query: String) -> Result<TokenResponse, ShodanError>;
+    async fn host_tokens(&self, query: String) -> Result<TokenResponse, ShodanError>;
 }
 
 #[derive(Deserialize, Debug)]
@@ -336,8 +338,9 @@ pub struct Vuln {
     pub summary: String,
 }
 
+#[async_trait]
 impl Search for ShodanClient {
-    fn host_ip(
+    async fn host_ip(
         &self,
         ip: String,
         history: Option<bool>,
@@ -347,10 +350,10 @@ impl Search for ShodanClient {
         add_optional_parameter("history", history, &mut parameters);
         add_optional_parameter("minifi", minifi, &mut parameters);
 
-        Self::fetch(self.build_request_url(format!("/shodan/host/{ip}").as_str(), Some(parameters)))
+        Self::fetch(self.build_request_url(format!("/shodan/host/{ip}").as_str(), Some(parameters))).await
     }
 
-    fn host_search(
+    async fn host_search(
         &self,
         query: String,
         facets: Option<&str>,
@@ -362,10 +365,10 @@ impl Search for ShodanClient {
         add_optional_parameter("page", page, &mut parameters);
         add_optional_parameter("minifi", minifi, &mut parameters);
 
-        Self::fetch(self.build_request_url("/shodan/host/search", Some(parameters)))
+        Self::fetch(self.build_request_url("/shodan/host/search", Some(parameters))).await
     }
 
-    fn host_count(
+    async fn host_count(
         &self,
         query: String,
         facets: Option<&str>,
@@ -373,21 +376,21 @@ impl Search for ShodanClient {
         let mut parameters = HashMap::from([(String::from("query"), query)]);
         add_optional_parameter("facets", facets, &mut parameters);
 
-        Self::fetch(self.build_request_url("/shodan/host/count", Some(parameters)))
+        Self::fetch(self.build_request_url("/shodan/host/count", Some(parameters))).await
     }
 
-    fn host_facets(&self) -> Result<Vec<String>, ShodanError> {
-        Self::fetch(self.build_request_url("/shodan/host/search/facets", None))
+    async fn host_facets(&self) -> Result<Vec<String>, ShodanError> {
+        Self::fetch(self.build_request_url("/shodan/host/search/facets", None)).await
     }
 
-    fn host_filters(&self) -> Result<Vec<String>, ShodanError> {
-        Self::fetch(self.build_request_url("/shodan/host/search/filters", None))
+    async fn host_filters(&self) -> Result<Vec<String>, ShodanError> {
+        Self::fetch(self.build_request_url("/shodan/host/search/filters", None)).await
     }
 
-    fn host_tokens(&self, query: String) -> Result<TokenResponse, ShodanError> {
+    async fn host_tokens(&self, query: String) -> Result<TokenResponse, ShodanError> {
         let parameters = HashMap::from([(String::from("query"), query)]);
 
-        Self::fetch(self.build_request_url("/shodan/host/search/tokens", Some(parameters)))
+        Self::fetch(self.build_request_url("/shodan/host/search/tokens", Some(parameters))).await
     }
 }
 
@@ -397,46 +400,49 @@ pub mod tests {
     use crate::ShodanClient;
     use crate::tests::get_test_api_key;
 
-    #[test]
-    fn can_get_google_host_ip() {
+    #[tokio::test]
+    async fn can_get_google_host_ip() {
         let client = ShodanClient::new(get_test_api_key());
         client
             .host_ip(String::from("8.8.8.8"), None, None)
+            .await
             .unwrap();
     }
 
-    #[test]
-    fn can_get_host_facets() {
+    #[tokio::test]
+    async fn can_get_host_facets() {
         let client = ShodanClient::new(get_test_api_key());
-        client.host_facets().unwrap();
+        client.host_facets().await.unwrap();
     }
 
-    #[test]
-    fn can_get_host_filters() {
+    #[tokio::test]
+    async fn can_get_host_filters() {
         let client = ShodanClient::new(get_test_api_key());
-        client.host_filters().unwrap();
+        client.host_filters().await.unwrap();
     }
 
-    #[test]
-    fn can_get_google_count() {
+    #[tokio::test]
+    async fn can_get_google_count() {
         let client = ShodanClient::new(get_test_api_key());
         client
             .host_count(String::from("google"), None)
+            .await
             .unwrap();
     }
 
-    #[test]
-    fn can_get_google_count_with_facets() {
+    #[tokio::test]
+    async fn can_get_google_count_with_facets() {
         let client = ShodanClient::new(get_test_api_key());
         client
             .host_count(String::from("google"), Some("os,country"))
+            .await
             .unwrap();
     }
 
-    #[test]
-    fn can_get_google_search() {
+    #[tokio::test]
+    async fn can_get_google_search() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.host_search(String::from("google"), None, None, None);
+        let response = client.host_search(String::from("google"), None, None, None).await;
 
         match response {
             Ok(r) => {
@@ -453,11 +459,12 @@ pub mod tests {
         }
     }
 
-    #[test]
-    fn can_get_raspbian_tokens() {
+    #[tokio::test]
+    async fn can_get_raspbian_tokens() {
         let client = ShodanClient::new(get_test_api_key());
         client
             .host_tokens(String::from("Raspbian port:22"))
+            .await
             .unwrap();
     }
 }

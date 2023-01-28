@@ -1,19 +1,22 @@
-use crate::error::ShodanError;
 use crate::ShodanClient;
+use async_trait::async_trait;
+use crate::error::ShodanError;
 use std::collections::HashMap;
 
+#[async_trait]
 pub trait Utility {
-    fn get_my_ip(&self) -> Result<String, ShodanError>;
-    fn get_http_headers(&self) -> Result<HashMap<String, String>, ShodanError>;
+    async fn get_my_ip(&self) -> Result<String, ShodanError>;
+    async fn get_http_headers(&self) -> Result<HashMap<String, String>, ShodanError>;
 }
 
+#[async_trait]
 impl Utility for ShodanClient {
-    fn get_my_ip(&self) -> Result<String, ShodanError> {
-        Self::fetch(self.build_request_url("/tools/myip", None))
+    async fn get_my_ip(&self) -> Result<String, ShodanError> {
+        Self::fetch(self.build_request_url("/tools/myip", None)).await
     }
 
-    fn get_http_headers(&self) -> Result<HashMap<String, String>, ShodanError> {
-        Self::fetch(self.build_request_url("/tools/httpheaders", None))
+    async fn get_http_headers(&self) -> Result<HashMap<String, String>, ShodanError> {
+        Self::fetch(self.build_request_url("/tools/httpheaders", None)).await
     }
 }
 
@@ -23,15 +26,15 @@ pub mod tests {
     use crate::utility::Utility;
     use crate::tests::get_test_api_key;
 
-    #[test]
-    fn can_get_my_ip() {
+    #[tokio::test]
+    async fn can_get_my_ip() {
         let client = ShodanClient::new(get_test_api_key());
-        client.get_my_ip().unwrap();
+        client.get_my_ip().await.unwrap();
     }
 
-    #[test]
-    fn can_get_http_headers() {
+    #[tokio::test]
+    async fn can_get_http_headers() {
         let client = ShodanClient::new(get_test_api_key());
-        client.get_http_headers().unwrap();
+        client.get_http_headers().await.unwrap();
     }
 }

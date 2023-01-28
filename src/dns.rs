@@ -1,7 +1,8 @@
+use serde::Deserialize;
+use async_trait::async_trait;
+use std::collections::HashMap;
 use crate::error::ShodanError;
 use crate::{add_optional_parameter, ShodanClient};
-use serde::Deserialize;
-use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct DnsDomainResponse {
@@ -21,8 +22,9 @@ pub struct DnsDomainDataItem {
     pub last_seen: String,
 }
 
+#[async_trait]
 pub trait Dns {
-    fn dns_domain(
+    async fn dns_domain(
         &self,
         domain: String,
         history: Option<bool>,
@@ -30,16 +32,17 @@ pub trait Dns {
         page: Option<i32>,
     ) -> Result<DnsDomainResponse, ShodanError>;
 
-    fn dns_resolve(
+    async fn dns_resolve(
         &self,
         hostnames: Vec<String>,
     ) -> Result<HashMap<String, Option<String>>, ShodanError>;
 
-    fn dns_reverse(&self, ips: Vec<String>) -> Result<HashMap<String, Vec<String>>, ShodanError>;
+    async fn dns_reverse(&self, ips: Vec<String>) -> Result<HashMap<String, Vec<String>>, ShodanError>;
 }
 
+#[async_trait]
 impl Dns for ShodanClient {
-    fn dns_domain(
+    async fn dns_domain(
         &self,
         domain: String,
         history: Option<bool>,
@@ -53,22 +56,22 @@ impl Dns for ShodanClient {
 
         Self::fetch(
             self.build_request_url(format!("/dns/domain/{domain}").as_str(), Some(parameters)),
-        )
+        ).await
     }
 
-    fn dns_resolve(
+    async fn dns_resolve(
         &self,
         hostnames: Vec<String>,
     ) -> Result<HashMap<String, Option<String>>, ShodanError> {
         let parameters = HashMap::from([(String::from("hostnames"), hostnames.join(","))]);
 
-        Self::fetch(self.build_request_url("/dns/resolve", Some(parameters)))
+        Self::fetch(self.build_request_url("/dns/resolve", Some(parameters))).await
     }
 
-    fn dns_reverse(&self, ips: Vec<String>) -> Result<HashMap<String, Vec<String>>, ShodanError> {
+    async fn dns_reverse(&self, ips: Vec<String>) -> Result<HashMap<String, Vec<String>>, ShodanError> {
         let parameters = HashMap::from([(String::from("ips"), ips.join(","))]);
 
-        Self::fetch(self.build_request_url("/dns/reverse", Some(parameters)))
+        Self::fetch(self.build_request_url("/dns/reverse", Some(parameters))).await
     }
 }
 
@@ -78,30 +81,33 @@ pub mod tests {
     use crate::ShodanClient;
     use crate::tests::get_test_api_key;
 
-    #[test]
-    fn can_get_dns_domain() {
+    #[tokio::test]
+    async fn can_get_dns_domain() {
         let client = ShodanClient::new(get_test_api_key());
         client
             .dns_domain(String::from("google.com"), None, None, None)
+            .await
             .unwrap();
     }
 
-    #[test]
-    fn can_get_dns_resolve() {
+    #[tokio::test]
+    async fn can_get_dns_resolve() {
         let client = ShodanClient::new(get_test_api_key());
         client
             .dns_resolve(vec![
                 String::from("google.com"),
                 String::from("facebook.com"),
             ])
+            .await
             .unwrap();
     }
 
-    #[test]
-    fn can_get_dns_reverse() {
+    #[tokio::test]
+    async fn can_get_dns_reverse() {
         let client = ShodanClient::new(get_test_api_key());
         client
             .dns_reverse(vec![String::from("8.8.8.8"), String::from("1.1.1.1")])
+            .await
             .unwrap();
     }
 }

@@ -1,24 +1,26 @@
+use serde::Deserialize;
+use async_trait::async_trait;
+use std::collections::HashMap;
 use crate::error::ShodanError;
 use crate::response::ShodanClientResponse;
 use crate::{add_optional_parameter, ShodanClient};
-use serde::Deserialize;
-use std::collections::HashMap;
 
+#[async_trait]
 pub trait Directory {
-    fn directory_query(
+    async fn directory_query(
         &self,
         page: Option<i32>,
         sort: Option<String>,
         order: Option<String>,
     ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError>;
 
-    fn directory_query_search(
+    async fn directory_query_search(
         &self,
         query: String,
         page: Option<i32>,
     ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError>;
 
-    fn directory_query_tags(
+    async fn directory_query_tags(
         &self,
         size: Option<i32>,
     ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, ShodanError>;
@@ -52,8 +54,9 @@ pub struct DirectoryQueryTagsResponseMatch {
     pub value: String,
 }
 
+#[async_trait]
 impl Directory for ShodanClient {
-    fn directory_query(
+    async fn directory_query(
         &self,
         page: Option<i32>,
         sort: Option<String>,
@@ -64,10 +67,10 @@ impl Directory for ShodanClient {
         add_optional_parameter("sort", sort, &mut parameters);
         add_optional_parameter("order", order, &mut parameters);
 
-        Self::fetch(self.build_request_url("/shodan/query", Some(parameters)))
+        Self::fetch(self.build_request_url("/shodan/query", Some(parameters))).await
     }
 
-    fn directory_query_search(
+    async fn directory_query_search(
         &self,
         query: String,
         page: Option<i32>,
@@ -75,17 +78,17 @@ impl Directory for ShodanClient {
         let mut parameters = HashMap::from([(String::from("query"), query)]);
         add_optional_parameter("page", page, &mut parameters);
 
-        Self::fetch(self.build_request_url("/shodan/query/search", Some(parameters)))
+        Self::fetch(self.build_request_url("/shodan/query/search", Some(parameters))).await
     }
 
-    fn directory_query_tags(
+    async fn directory_query_tags(
         &self,
         size: Option<i32>,
     ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, ShodanError> {
         let mut parameters = HashMap::new();
         add_optional_parameter("size", size, &mut parameters);
 
-        Self::fetch(self.build_request_url("/shodan/query/tags", None))
+        Self::fetch(self.build_request_url("/shodan/query/tags", None)).await
     }
 }
 
@@ -95,23 +98,24 @@ pub mod tests {
     use crate::tests::get_test_api_key;
     use crate::ShodanClient;
 
-    #[test]
-    fn can_get_directory_query() {
+    #[tokio::test]
+    async fn can_get_directory_query() {
         let client = ShodanClient::new(get_test_api_key());
-        client.directory_query(None, None, None).unwrap();
+        client.directory_query(None, None, None).await.unwrap();
     }
 
-    #[test]
-    fn can_get_directory_query_search() {
+    #[tokio::test]
+    async fn can_get_directory_query_search() {
         let client = ShodanClient::new(get_test_api_key());
         client
             .directory_query_search(String::from("webcam"), None)
+            .await
             .unwrap();
     }
 
-    #[test]
-    fn can_get_directory_query_tags() {
+    #[tokio::test]
+    async fn can_get_directory_query_tags() {
         let client = ShodanClient::new(get_test_api_key());
-        client.directory_query_tags(None).unwrap();
+        client.directory_query_tags(None).await.unwrap();
     }
 }

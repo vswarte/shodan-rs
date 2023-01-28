@@ -1,9 +1,11 @@
-use crate::error::ShodanError;
 use crate::ShodanClient;
 use serde::Deserialize;
+use async_trait::async_trait;
+use crate::error::ShodanError;
 
+#[async_trait]
 pub trait Account {
-    fn get_account_profile(&self) -> Result<AccountProfileResponse, ShodanError>;
+    async fn get_account_profile(&self) -> Result<AccountProfileResponse, ShodanError>;
 }
 
 #[derive(Deserialize, Debug)]
@@ -14,9 +16,10 @@ pub struct AccountProfileResponse {
     pub created: String,
 }
 
+#[async_trait]
 impl Account for ShodanClient {
-    fn get_account_profile(&self) -> Result<AccountProfileResponse, ShodanError> {
-        Self::fetch(self.build_request_url("/account/profile", None))
+    async fn get_account_profile(&self) -> Result<AccountProfileResponse, ShodanError> {
+        Self::fetch(self.build_request_url("/account/profile", None)).await
     }
 }
 
@@ -26,9 +29,9 @@ pub mod tests {
     use crate::ShodanClient;
     use crate::tests::get_test_api_key;
 
-    #[test]
-    fn can_get_account_profile() {
+    #[tokio::test]
+    async fn can_get_account_profile() {
         let client = ShodanClient::new(get_test_api_key());
-        client.get_account_profile().unwrap();
+        client.get_account_profile().await.unwrap();
     }
 }
