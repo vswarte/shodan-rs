@@ -1,7 +1,8 @@
 # Shodan-rs
 
 A shodan client written in rust (if that wasn't clear yet). This library is heavily in flux and is missing a lot of
-components. I suggest waiting until the API is less in flux and there is a crate published.
+components. I suggest waiting until the API is less in flux and we've reached 1.0.0.
+This library builds on tokio to provide the task runtime.
 
 ## API support
 The official shodan API documentation can be found [here](https://developer.shodan.io/api).
@@ -12,12 +13,16 @@ You can review the support table below.
 First off you'll want to create a `ShodanClient`. This requires an API key from [shodan.io](https://shodan.io).
 Once you're acquired your key you can spawn a client like so:
 ```rust
-let shodan_client = ShodanClient::new(String::from("API-KEY-GOES-HERE"));
+use shodan_client::ShodanClient;
+
+let client = ShodanClient::new(String::from("API-KEY-GOES-HERE"));
 ```
 
 You can then make calls to the shodan API. As an example we can fetch our shodan account details:
 ```rust
-let account_details = shodan_client.get_account_profile().unwrap();
+use shodan_client::account::Account; // Include the trait the adds the account functionality
+
+let account_details = client.get_account_profile().await.unwrap();
 println!("Account Details: {:?}", account_details);
 ```
 
