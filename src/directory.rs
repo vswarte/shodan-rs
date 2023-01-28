@@ -92,20 +92,19 @@ impl Directory for ShodanClient {
 #[cfg(test)]
 pub mod tests {
     use crate::directory::Directory;
-    use crate::response::ShodanClientResponse;
     use crate::tests::get_test_api_key;
     use crate::ShodanClient;
 
     #[test]
     fn can_get_directory_query() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.directory_query(None, None, None).unwrap();
+        client.directory_query(None, None, None).unwrap();
     }
 
     #[test]
     fn can_get_directory_query_search() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client
+        client
             .directory_query_search(String::from("webcam"), None)
             .unwrap();
     }
@@ -113,6 +112,6 @@ pub mod tests {
     #[test]
     fn can_get_directory_query_tags() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.directory_query_tags(None).unwrap();
+        client.directory_query_tags(None).unwrap();
     }
 }

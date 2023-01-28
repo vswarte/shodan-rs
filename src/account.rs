@@ -1,5 +1,4 @@
 use crate::error::ShodanError;
-use crate::response::ShodanClientResponse;
 use crate::ShodanClient;
 use serde::Deserialize;
 
@@ -24,16 +23,12 @@ impl Account for ShodanClient {
 #[cfg(test)]
 pub mod tests {
     use crate::account::Account;
-    use crate::response::ShodanClientResponse;
-    use crate::tests::get_test_api_key;
     use crate::ShodanClient;
+    use crate::tests::get_test_api_key;
 
     #[test]
     fn can_get_account_profile() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.get_account_profile().unwrap();
-
-        // This endpoint is heavily rate limited so we should be good with either
-        // response or API error
+        client.get_account_profile().unwrap();
     }
 }

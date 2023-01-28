@@ -1,5 +1,4 @@
 use crate::error::ShodanError;
-use crate::response::ShodanClientResponse;
 use crate::ShodanClient;
 use serde::Deserialize;
 
@@ -36,13 +35,12 @@ impl ApiInfo for ShodanClient {
 #[cfg(test)]
 pub mod tests {
     use crate::api_status::ApiInfo;
-    use crate::response::ShodanClientResponse;
     use crate::tests::get_test_api_key;
     use crate::ShodanClient;
 
     #[test]
     fn can_get_api_info() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.get_api_info().unwrap();
+        client.get_api_info().unwrap();
     }
 }

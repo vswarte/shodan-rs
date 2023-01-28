@@ -1,5 +1,4 @@
 use crate::error::ShodanError;
-use crate::response::ShodanClientResponse;
 use crate::ShodanClient;
 use std::collections::HashMap;
 
@@ -20,10 +19,9 @@ impl Utility for ShodanClient {
 
 #[cfg(test)]
 pub mod tests {
-    use crate::response::ShodanClientResponse;
-    use crate::tests::get_test_api_key;
-    use crate::utility::Utility;
     use crate::ShodanClient;
+    use crate::utility::Utility;
+    use crate::tests::get_test_api_key;
 
     #[test]
     fn can_get_my_ip() {

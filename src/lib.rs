@@ -1,21 +1,20 @@
+use crate::error::ShodanError;
+use crate::error::ShodanError::ShodanClientError;
 use crate::response::ShodanClientResponse;
 use serde::Deserialize;
 use std::collections::HashMap;
 use url::Url;
-use crate::error::ShodanError;
-use crate::error::ShodanError::ShodanClientError;
 
 pub mod account;
 pub mod api_status;
+pub mod builders;
 pub mod directory;
 pub mod dns;
+pub mod error;
 pub mod response;
 pub mod scanning;
 pub mod search;
 pub mod utility;
-pub mod builders;
-pub mod error;
-pub mod search_result;
 
 const BASE_API_URL: &'static str = "https://api.shodan.io";
 
@@ -47,17 +46,22 @@ impl ShodanClient {
         return url.to_string();
     }
 
-    fn fetch<T: for<'a> Deserialize<'a>>(
-        url: String,
-    ) -> Result<T, ShodanError> {
-        match reqwest::blocking::get(url)?.json::<ShodanClientResponse<T>>()? {
-            ShodanClientResponse::Error(e) => { Err(ShodanClientError(format!("{} response: {}", e.error, "")))}
-            ShodanClientResponse::Response(r) => { Ok(r) }
+    fn fetch<T: for<'a> Deserialize<'a>>(url: String) -> Result<T, ShodanError> {
+        let response = reqwest::blocking::get(url);
+        match response?.json::<ShodanClientResponse<T>>()? {
+            ShodanClientResponse::Error(e) => {
+                Err(ShodanClientError(format!("Error response: {}", e.error)))
+            }
+            ShodanClientResponse::Response(r) => Ok(r),
         }
     }
 }
 
-pub fn add_optional_parameter(name: &str, param: Option<impl ToString>, map: &mut HashMap<String, String>) {
+pub fn add_optional_parameter(
+    name: &str,
+    param: Option<impl ToString>,
+    map: &mut HashMap<String, String>,
+) {
     if let Some(unwrapped) = param {
         map.insert(name.into(), unwrapped.to_string());
     }

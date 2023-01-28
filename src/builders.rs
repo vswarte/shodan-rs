@@ -11,7 +11,7 @@ impl SslFilterBuilder {
         }
     }
 
-    fn build(self) -> HashMap<String, Vec<String>> {
+    pub fn build(self) -> HashMap<String, Vec<String>> {
         self.filters
     }
 
@@ -33,14 +33,14 @@ pub struct SearchQueryBuilder {
 }
 
 impl SearchQueryBuilder {
-    fn new() -> Self {
+    pub fn new() -> Self {
         SearchQueryBuilder {
             query: String::new(),
             filters: Default::default(),
         }
     }
 
-    fn build(self) -> String {
+    pub fn build(self) -> String {
         let mut query = vec![];
         if self.query.len() != 0 {
             query.push(self.query);
@@ -52,13 +52,13 @@ impl SearchQueryBuilder {
         query.join(" ")
     }
 
-    fn query(mut self, query: impl ToString) -> Self {
+    pub fn query(mut self, query: impl ToString) -> Self {
         self.query = query.to_string();
 
         self
     }
 
-    fn port(mut self, value: impl ToString) -> Self {
+    pub fn port(mut self, value: impl ToString) -> Self {
         let values = self
             .filters
             .entry("port".into())
@@ -69,7 +69,7 @@ impl SearchQueryBuilder {
         self
     }
 
-    fn product(mut self, filter: impl ToString) -> Self {
+    pub fn product(mut self, filter: impl ToString) -> Self {
         let values = self
             .filters
             .entry("product".into())
@@ -80,7 +80,7 @@ impl SearchQueryBuilder {
         self
     }
 
-    fn ssl(mut self, closure: fn(SslFilterBuilder) -> SslFilterBuilder) -> Self {
+    pub fn ssl(mut self, closure: fn(SslFilterBuilder) -> SslFilterBuilder) -> Self {
         let filters = closure(SslFilterBuilder::new()).build();
 
         self.filters.extend(filters);

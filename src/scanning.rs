@@ -24,7 +24,6 @@ impl Scanning for ShodanClient {
 
 #[cfg(test)]
 pub mod tests {
-    use crate::response::ShodanClientResponse;
     use crate::scanning::Scanning;
     use crate::tests::get_test_api_key;
     use crate::ShodanClient;
@@ -32,12 +31,12 @@ pub mod tests {
     #[test]
     fn can_get_ports() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.get_scanning_ports().unwrap();
+        client.get_scanning_ports().unwrap();
     }
 
     #[test]
     fn can_get_protocols() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.get_scanning_protocols().unwrap();
+        client.get_scanning_protocols().unwrap();
     }
 }

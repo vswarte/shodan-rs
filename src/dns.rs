@@ -1,5 +1,4 @@
 use crate::error::ShodanError;
-use crate::response::ShodanClientResponse;
 use crate::{add_optional_parameter, ShodanClient};
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -76,14 +75,13 @@ impl Dns for ShodanClient {
 #[cfg(test)]
 pub mod tests {
     use crate::dns::Dns;
-    use crate::response::ShodanClientResponse;
-    use crate::tests::get_test_api_key;
     use crate::ShodanClient;
+    use crate::tests::get_test_api_key;
 
     #[test]
     fn can_get_dns_domain() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client
+        client
             .dns_domain(String::from("google.com"), None, None, None)
             .unwrap();
     }
@@ -91,7 +89,7 @@ pub mod tests {
     #[test]
     fn can_get_dns_resolve() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client
+        client
             .dns_resolve(vec![
                 String::from("google.com"),
                 String::from("facebook.com"),
@@ -102,7 +100,7 @@ pub mod tests {
     #[test]
     fn can_get_dns_reverse() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client
+        client
             .dns_reverse(vec![String::from("8.8.8.8"), String::from("1.1.1.1")])
             .unwrap();
     }
