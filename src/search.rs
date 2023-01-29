@@ -446,14 +446,14 @@ pub mod tests {
 
         match response {
             Ok(r) => {
-                println!("{:?}", r)
+                println!("{r:?}")
             }
             Err(e) => match e {
                 ShodanError::ShodanClientError(e) => {
-                    panic!("Got a shodan client error: {}", e)
+                    panic!("Got a shodan client error: {e}")
                 }
                 ShodanError::ReqwestError(e) => {
-                    panic!("Got a reqwest error: {:?}", e)
+                    panic!("Got a reqwest error: {e:?}")
                 }
             },
         }

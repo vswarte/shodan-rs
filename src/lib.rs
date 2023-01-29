@@ -16,7 +16,7 @@ pub mod scanning;
 pub mod search;
 pub mod utility;
 
-const BASE_API_URL: &'static str = "https://api.shodan.io";
+const BASE_API_URL: &str = "https://api.shodan.io";
 
 pub struct ShodanClient {
     api_key: String,
@@ -43,16 +43,16 @@ impl ShodanClient {
                 .extend_pairs(url_parameters.into_iter());
         }
 
-        return url.to_string();
+        url.to_string()
     }
 
     async fn fetch<T: for<'a> Deserialize<'a>>(url: String) -> Result<T, ShodanError> {
         let response = reqwest::get(url)
             .await
-            .map_err(|x| ShodanError::ReqwestError(x))?
+            .map_err(ShodanError::ReqwestError)?
             .json::<ShodanClientResponse<T>>()
             .await
-            .map_err(|x| ShodanError::ReqwestError(x))?;
+            .map_err(ShodanError::ReqwestError)?;
 
         match response {
             ShodanClientResponse::Error(e) => {

@@ -1,16 +1,11 @@
 use std::collections::HashMap;
 
+#[derive(Default)]
 pub struct SslFilterBuilder {
     filters: HashMap<String, Vec<String>>,
 }
 
 impl SslFilterBuilder {
-    pub fn new() -> Self {
-        SslFilterBuilder {
-            filters: Default::default(),
-        }
-    }
-
     pub fn build(self) -> HashMap<String, Vec<String>> {
         self.filters
     }
@@ -27,22 +22,16 @@ impl SslFilterBuilder {
     }
 }
 
+#[derive(Default)]
 pub struct SearchQueryBuilder {
     query: String,
     filters: HashMap<String, Vec<String>>,
 }
 
 impl SearchQueryBuilder {
-    pub fn new() -> Self {
-        SearchQueryBuilder {
-            query: String::new(),
-            filters: Default::default(),
-        }
-    }
-
     pub fn build(self) -> String {
         let mut query = vec![];
-        if self.query.len() != 0 {
+        if !self.query.is_empty() {
             query.push(self.query);
         }
         for (filter, values) in self.filters {
@@ -81,7 +70,7 @@ impl SearchQueryBuilder {
     }
 
     pub fn ssl(mut self, closure: fn(SslFilterBuilder) -> SslFilterBuilder) -> Self {
-        let filters = closure(SslFilterBuilder::new()).build();
+        let filters = closure(SslFilterBuilder::default()).build();
 
         self.filters.extend(filters);
 
@@ -95,7 +84,7 @@ pub mod tests {
 
     #[test]
     fn can_build_query() {
-        let query = SearchQueryBuilder::new()
+        let query = SearchQueryBuilder::default()
             .query("apache")
             .port("69")
             .port(420)
@@ -103,35 +92,33 @@ pub mod tests {
             .product("Ngnix")
             .build();
 
-        assert!(query.contains("port:69,420"), "query was: {}", query);
+        assert!(query.contains("port:69,420"), "query was: {query}");
         assert!(
             query.contains("product:Apache,Ngnix"),
-            "query was: {}",
-            query
+            "query was: {query}"
         );
-        assert!(query.starts_with("apache"), "query was: {}", query);
+        assert!(query.starts_with("apache"), "query was: {query}");
     }
 
     #[test]
     fn can_build_without_query() {
-        let query = SearchQueryBuilder::new()
+        let query = SearchQueryBuilder::default()
             .port("69")
             .port(420)
             .product("Apache")
             .product("Ngnix")
             .build();
 
-        assert!(query.contains("port:69,420"), "query was: {}", query);
+        assert!(query.contains("port:69,420"), "query was: {query}");
         assert!(
             query.contains("product:Apache,Ngnix"),
-            "query was: {}",
-            query
+            "query was: {query}"
         );
     }
 
     #[test]
     fn can_build_with_ssl() {
-        let query = SearchQueryBuilder::new()
+        let query = SearchQueryBuilder::default()
             .port("69")
             .port(420)
             .product("Apache")
@@ -143,16 +130,14 @@ pub mod tests {
             })
             .build();
 
-        assert!(query.contains("port:69,420"), "query was: {}", query);
+        assert!(query.contains("port:69,420"), "query was: {query}");
         assert!(
             query.contains("product:Apache,Ngnix"),
-            "query was: {}",
-            query
+            "query was: {query}"
         );
         assert!(
             query.contains("cert.subject.cn:google.com,bing.com"),
-            "query was: {}",
-            query
+            "query was: {query}"
         );
     }
 }
