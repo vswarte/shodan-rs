@@ -144,7 +144,7 @@ pub struct Http {
     pub components: Option<HashMap<String, Component>>,
     pub html_hash: i64,
     pub sitemap: Option<String>,
-    pub securitytxt_hash: Option<String>,
+    pub securitytxt_hash: Option<i64>,
     pub favicon: Option<Favicon>,
     pub waf: Option<String>,
 }
@@ -209,7 +209,7 @@ pub struct Ssl {
     pub chain: Vec<String>,
     pub dhparams: Option<Dhparams>,
     pub versions: Vec<String>,
-    pub acceptable_cas: Vec<String>,
+    //pub acceptable_cas: Vec<String>,
     pub tlsext: Vec<Tlsext>,
     #[serde(rename = "ja3s")]
     pub ja3_s: String,
@@ -254,7 +254,7 @@ pub struct Issuer {
     #[serde(rename = "C")]
     pub c: Option<String>,
     #[serde(rename = "CN")]
-    pub cn: String,
+    pub cn: Option<String>,
     #[serde(rename = "O")]
     pub o: Option<String>,
     #[serde(rename = "L")]
@@ -287,7 +287,7 @@ pub struct Dhparams {
     pub public_key: String,
     pub bits: i64,
     pub generator: i64,
-    pub fingerprint: String,
+    pub fingerprint: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
