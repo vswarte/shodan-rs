@@ -91,12 +91,12 @@ pub struct SearchResult {
 #[derive(Debug, Deserialize)]
 pub struct SearchResultMatch {
     pub hash: i64,
-    pub asn: String,
+    pub asn: Option<String>,
     pub http: Option<Http>,
     pub os: Option<String>,
     pub tags: Option<Vec<String>>,
     pub timestamp: String,
-    pub isp: String,
+    pub isp: Option<String>,
     pub transport: String,
     #[serde(rename = "_shodan")]
     pub shodan: Shodan,
