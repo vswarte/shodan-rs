@@ -1,11 +1,13 @@
-# Shodan-rs
+# Shodan-client [![Build Status]][actions] [![Latest Version]][crates.io] [![Docs Status]][docs] [![License Status]][license]
 
-[![Docs Status]][Docs Link]
-[![License Status]][License Link]
-[License Status]: https://img.shields.io/github/license/vswarte/shodan-rs
-[License Link]: https://github.com/vswarte/shodan-rs/blob/main/LICENSE-APACHE
+[Build Status]: https://img.shields.io/github/actions/workflow/status/vswarte/shodan-rs/rust.yml?branch=main
+[actions]: https://github.com/vswarte/shodan-rs/actions?query=branch%3Amain
+[Latest Version]: https://img.shields.io/crates/v/shodan_client.svg
+[crates.io]: https://crates.io/crates/shodan\_client
 [Docs Status]: https://img.shields.io/docsrs/shodan-client/0.1.1
-[Docs Link]: https://docs.rs/shodan-client/latest/shodan_client/
+[docs]: https://docs.rs/shodan-client/latest/shodan_client/
+[License Status]: https://img.shields.io/github/license/vswarte/shodan-rs
+[license]: https://github.com/vswarte/shodan-rs/blob/main/LICENSE-APACHE
 
 A shodan client written in rust (if that wasn't clear yet). This library is heavily in flux and is missing a lot of
 components. I suggest waiting until the API is less in flux and we've reached 1.0.0.
