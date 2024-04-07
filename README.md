@@ -1,11 +1,11 @@
 # Shodan-rs
 
+![docs.rs (with version)](https://img.shields.io/docsrs/shodan-client/0.1.1)
+![GitHub License](https://img.shields.io/github/license/vswarte/shodan-rs)
+
 A shodan client written in rust (if that wasn't clear yet). This library is heavily in flux and is missing a lot of
 components. I suggest waiting until the API is less in flux and we've reached 1.0.0.
 This library builds on tokio to provide the task runtime.
-
-![docs.rs (with version)](https://img.shields.io/docsrs/shodan-client/0.1.1)
-![GitHub License](https://img.shields.io/github/license/vswarte/shodan-rs)
 
 ## API support
 The official shodan API documentation can be found [here](https://developer.shodan.io/api).
