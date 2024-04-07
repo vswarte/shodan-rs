@@ -101,7 +101,7 @@ pub struct SearchResultMatch {
     pub location: LocationClass,
     pub ip: Option<i64>,
     pub domains: Vec<String>,
-    pub org: String,
+    pub org: Option<String>,
     pub data: String,
     pub port: i64,
     pub ip_str: String,
@@ -109,9 +109,9 @@ pub struct SearchResultMatch {
     pub cpe23: Option<Vec<String>>,
     pub cpe: Option<Vec<String>>,
     pub version: Option<String>,
-    //pub mysql: Option<Mysql>,
+    pub mysql: Option<Mysql>,
     pub info: Option<String>,
-    //pub vulns: Option<HashMap<String, Vuln>>,
+    pub vulns: Option<HashMap<String, Vuln>>,
     pub ipv6: Option<String>,
 }
 
