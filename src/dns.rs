@@ -1,8 +1,6 @@
-use crate::error::ShodanError;
-use crate::{add_optional_parameter, ShodanClient};
+use crate::*;
 use async_trait::async_trait;
 use serde::Deserialize;
-use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct DnsDomainResponse {
@@ -29,18 +27,18 @@ pub trait Dns {
         domain: String,
         history: Option<bool>,
         dns_type: Option<String>,
-        page: Option<i32>,
-    ) -> Result<DnsDomainResponse, ShodanError>;
+        page: Option<u32>,
+    ) -> Result<DnsDomainResponse, Error>;
 
     async fn dns_resolve(
         &self,
         hostnames: Vec<String>,
-    ) -> Result<HashMap<String, Option<String>>, ShodanError>;
+    ) -> Result<HashMap<String, Option<String>>, Error>;
 
     async fn dns_reverse(
         &self,
         ips: Vec<String>,
-    ) -> Result<HashMap<String, Vec<String>>, ShodanError>;
+    ) -> Result<HashMap<String, Vec<String>>, Error>;
 }
 
 #[async_trait]
@@ -50,35 +48,35 @@ impl Dns for ShodanClient {
         domain: String,
         history: Option<bool>,
         dns_type: Option<String>,
-        page: Option<i32>,
-    ) -> Result<DnsDomainResponse, ShodanError> {
-        let mut parameters = HashMap::new();
-        add_optional_parameter("history", history, &mut parameters);
-        add_optional_parameter("dns_type", dns_type, &mut parameters);
-        add_optional_parameter("page", page, &mut parameters);
+        page: Option<u32>,
+    ) -> Result<DnsDomainResponse, Error> {
+        let mut parameters = ParameterBag::default();
+        parameters.set_optional("history", history);
+        parameters.set_optional("dns_type", dns_type);
+        parameters.set_optional("page", page);
 
-        Self::fetch(
-            self.build_request_url(format!("/dns/domain/{domain}").as_str(), Some(parameters)),
-        )
-        .await
+        Self::fetch(self.build_request_url(format!("/dns/domain/{domain}").as_str(), &parameters)?)
+            .await
     }
 
     async fn dns_resolve(
         &self,
         hostnames: Vec<String>,
-    ) -> Result<HashMap<String, Option<String>>, ShodanError> {
-        let parameters = HashMap::from([(String::from("hostnames"), hostnames.join(","))]);
+    ) -> Result<HashMap<String, Option<String>>, Error> {
+        let mut parameters = ParameterBag::default();
+        parameters.set("hostnames", hostnames.join(","));
 
-        Self::fetch(self.build_request_url("/dns/resolve", Some(parameters))).await
+        Self::fetch(self.build_request_url("/dns/resolve", &parameters)?).await
     }
 
     async fn dns_reverse(
         &self,
         ips: Vec<String>,
-    ) -> Result<HashMap<String, Vec<String>>, ShodanError> {
-        let parameters = HashMap::from([(String::from("ips"), ips.join(","))]);
+    ) -> Result<HashMap<String, Vec<String>>, Error> {
+        let mut parameters = ParameterBag::default();
+        parameters.set("ips", ips.join(","));
 
-        Self::fetch(self.build_request_url("/dns/reverse", Some(parameters))).await
+        Self::fetch(self.build_request_url("/dns/reverse", &parameters)?).await
     }
 }
 

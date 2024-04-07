@@ -1,5 +1,4 @@
-use crate::error::ShodanError;
-use crate::ShodanClient;
+use crate::*;
 use async_trait::async_trait;
 use serde::Deserialize;
 
@@ -25,13 +24,13 @@ pub struct ApiInfoResponseUsageLimits {
 
 #[async_trait]
 pub trait ApiInfo {
-    async fn get_api_info(&self) -> Result<ApiInfoResponse, ShodanError>;
+    async fn get_api_info(&self) -> Result<ApiInfoResponse, Error>;
 }
 
 #[async_trait]
 impl ApiInfo for ShodanClient {
-    async fn get_api_info(&self) -> Result<ApiInfoResponse, ShodanError> {
-        Self::fetch(self.build_request_url("/api-info", None)).await
+    async fn get_api_info(&self) -> Result<ApiInfoResponse, Error> {
+        Self::fetch(self.build_request_url("/api-info", &Default::default())?).await
     }
 }
 

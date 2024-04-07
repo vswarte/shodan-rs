@@ -1,8 +1,6 @@
-use crate::error::ShodanError;
-use crate::{add_optional_parameter, ShodanClient};
+use crate::*;
 use async_trait::async_trait;
 use serde::Deserialize;
-use std::collections::HashMap;
 
 #[async_trait]
 pub trait Search {
@@ -11,27 +9,27 @@ pub trait Search {
         ip: String,
         history: Option<bool>,
         minifi: Option<bool>,
-    ) -> Result<SearchHostIpResponse, ShodanError>;
+    ) -> Result<SearchHostIpResponse, Error>;
 
     async fn host_search(
         &self,
         query: String,
         facets: Option<&str>,
-        page: Option<i32>,
+        page: Option<u32>,
         minifi: Option<bool>,
-    ) -> Result<SearchResult, ShodanError>;
+    ) -> Result<SearchResult, Error>;
 
     async fn host_count(
         &self,
         query: String,
         facets: Option<&str>,
-    ) -> Result<CountResponse, ShodanError>;
+    ) -> Result<CountResponse, Error>;
 
-    async fn host_facets(&self) -> Result<Vec<String>, ShodanError>;
+    async fn host_facets(&self) -> Result<Vec<String>, Error>;
 
-    async fn host_filters(&self) -> Result<Vec<String>, ShodanError>;
+    async fn host_filters(&self) -> Result<Vec<String>, Error>;
 
-    async fn host_tokens(&self, query: String) -> Result<TokenResponse, ShodanError>;
+    async fn host_tokens(&self, query: String) -> Result<TokenResponse, Error>;
 }
 
 #[derive(Deserialize, Debug)]
@@ -345,12 +343,12 @@ impl Search for ShodanClient {
         ip: String,
         history: Option<bool>,
         minifi: Option<bool>,
-    ) -> Result<SearchHostIpResponse, ShodanError> {
-        let mut parameters = HashMap::new();
-        add_optional_parameter("history", history, &mut parameters);
-        add_optional_parameter("minifi", minifi, &mut parameters);
+    ) -> Result<SearchHostIpResponse, Error> {
+        let mut parameters = ParameterBag::default();
+        parameters.set_optional("history", history);
+        parameters.set_optional("minifi", minifi);
 
-        Self::fetch(self.build_request_url(format!("/shodan/host/{ip}").as_str(), Some(parameters)))
+        Self::fetch(self.build_request_url(format!("/shodan/host/{ip}").as_str(), &parameters)?)
             .await
     }
 
@@ -358,40 +356,44 @@ impl Search for ShodanClient {
         &self,
         query: String,
         facets: Option<&str>,
-        page: Option<i32>,
+        page: Option<u32>,
         minifi: Option<bool>,
-    ) -> Result<SearchResult, ShodanError> {
-        let mut parameters = HashMap::from([(String::from("query"), query)]);
-        add_optional_parameter("facets", facets, &mut parameters);
-        add_optional_parameter("page", page, &mut parameters);
-        add_optional_parameter("minifi", minifi, &mut parameters);
+    ) -> Result<SearchResult, Error> {
+        let mut parameters = ParameterBag::default();
+        parameters.set("query", query);
+        parameters.set_optional("facets", facets);
+        parameters.set_optional("page", page);
+        parameters.set_optional("minifi", minifi);
 
-        Self::fetch(self.build_request_url("/shodan/host/search", Some(parameters))).await
+        Self::fetch(self.build_request_url("/shodan/host/search", &parameters)?).await
     }
 
     async fn host_count(
         &self,
         query: String,
         facets: Option<&str>,
-    ) -> Result<CountResponse, ShodanError> {
-        let mut parameters = HashMap::from([(String::from("query"), query)]);
-        add_optional_parameter("facets", facets, &mut parameters);
+    ) -> Result<CountResponse, Error> {
+        let mut parameters = ParameterBag::default();
+        parameters.set("query", query);
+        parameters.set_optional("facets", facets);
 
-        Self::fetch(self.build_request_url("/shodan/host/count", Some(parameters))).await
+        Self::fetch(self.build_request_url("/shodan/host/count", &parameters)?).await
     }
 
-    async fn host_facets(&self) -> Result<Vec<String>, ShodanError> {
-        Self::fetch(self.build_request_url("/shodan/host/search/facets", None)).await
+    async fn host_facets(&self) -> Result<Vec<String>, Error> {
+        Self::fetch(self.build_request_url("/shodan/host/search/facets", &Default::default())?).await
     }
 
-    async fn host_filters(&self) -> Result<Vec<String>, ShodanError> {
-        Self::fetch(self.build_request_url("/shodan/host/search/filters", None)).await
+    async fn host_filters(&self) -> Result<Vec<String>, Error> {
+        Self::fetch(self.build_request_url("/shodan/host/search/filters", &Default::default())?)
+            .await
     }
 
-    async fn host_tokens(&self, query: String) -> Result<TokenResponse, ShodanError> {
-        let parameters = HashMap::from([(String::from("query"), query)]);
+    async fn host_tokens(&self, query: String) -> Result<TokenResponse, Error> {
+        let mut parameters = ParameterBag::default();
+        parameters.set("query", query);
 
-        Self::fetch(self.build_request_url("/shodan/host/search/tokens", Some(parameters))).await
+        Self::fetch(self.build_request_url("/shodan/host/search/tokens", &parameters)?).await
     }
 }
 
@@ -442,23 +444,10 @@ mod tests {
     #[tokio::test]
     async fn can_get_google_search() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client
-            .host_search(String::from("google"), None, None, None)
-            .await;
-
-        match response {
-            Ok(r) => {
-                println!("{r:?}")
-            }
-            Err(e) => match e {
-                ShodanError::ShodanClientError(e) => {
-                    panic!("Got a shodan client error: {e}")
-                }
-                ShodanError::ReqwestError(e) => {
-                    panic!("Got a reqwest error: {e:?}")
-                }
-            },
-        }
+        client
+            .host_search(String::from("google"), None, None, Some(true))
+            .await
+            .unwrap();
     }
 
     #[tokio::test]

@@ -1,11 +1,13 @@
-#[derive(Debug)]
-pub enum ShodanError {
-    ShodanClientError(String),
-    ReqwestError(reqwest::Error),
-}
+use thiserror::Error;
 
-impl From<reqwest::Error> for ShodanError {
-    fn from(e: reqwest::Error) -> Self {
-        ShodanError::ReqwestError(e)
-    }
+#[derive(Debug, Error)]
+pub enum Error {
+    #[error("Couldn't parse URL: {0}")]
+    UrlParse(#[from] url::ParseError),
+
+    #[error("Shodan API error: {0}")]
+    Shodan(String),
+
+    #[error("Caught reqwest error: {0}")]
+    Reqwest(#[from] reqwest::Error),
 }

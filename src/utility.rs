@@ -1,22 +1,20 @@
-use crate::error::ShodanError;
-use crate::ShodanClient;
+use crate::*;
 use async_trait::async_trait;
-use std::collections::HashMap;
 
 #[async_trait]
 pub trait Utility {
-    async fn get_my_ip(&self) -> Result<String, ShodanError>;
-    async fn get_http_headers(&self) -> Result<HashMap<String, String>, ShodanError>;
+    async fn get_my_ip(&self) -> Result<String, Error>;
+    async fn get_http_headers(&self) -> Result<HashMap<String, String>, Error>;
 }
 
 #[async_trait]
 impl Utility for ShodanClient {
-    async fn get_my_ip(&self) -> Result<String, ShodanError> {
-        Self::fetch(self.build_request_url("/tools/myip", None)).await
+    async fn get_my_ip(&self) -> Result<String, Error> {
+        Self::fetch(self.build_request_url("/tools/myip", &Default::default())?).await
     }
 
-    async fn get_http_headers(&self) -> Result<HashMap<String, String>, ShodanError> {
-        Self::fetch(self.build_request_url("/tools/httpheaders", None)).await
+    async fn get_http_headers(&self) -> Result<HashMap<String, String>, Error> {
+        Self::fetch(self.build_request_url("/tools/httpheaders", &Default::default())?).await
     }
 }
 

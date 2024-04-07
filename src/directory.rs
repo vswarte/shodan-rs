@@ -1,29 +1,26 @@
-use crate::error::ShodanError;
-use crate::response::ShodanClientResponse;
-use crate::{add_optional_parameter, ShodanClient};
+use crate::*;
 use async_trait::async_trait;
 use serde::Deserialize;
-use std::collections::HashMap;
 
 #[async_trait]
 pub trait Directory {
     async fn directory_query(
         &self,
-        page: Option<i32>,
+        page: Option<u32>,
         sort: Option<String>,
         order: Option<String>,
-    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError>;
+    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, Error>;
 
     async fn directory_query_search(
         &self,
         query: String,
-        page: Option<i32>,
-    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError>;
+        page: Option<u32>,
+    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, Error>;
 
     async fn directory_query_tags(
         &self,
-        size: Option<i32>,
-    ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, ShodanError>;
+        size: Option<u32>,
+    ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, Error>;
 }
 
 #[derive(Deserialize, Debug)]
@@ -58,37 +55,38 @@ pub struct DirectoryQueryTagsResponseMatch {
 impl Directory for ShodanClient {
     async fn directory_query(
         &self,
-        page: Option<i32>,
+        page: Option<u32>,
         sort: Option<String>,
         order: Option<String>,
-    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError> {
-        let mut parameters = HashMap::new();
-        add_optional_parameter("page", page, &mut parameters);
-        add_optional_parameter("sort", sort, &mut parameters);
-        add_optional_parameter("order", order, &mut parameters);
+    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, Error> {
+        let mut parameters = ParameterBag::default();
+        parameters.set_optional("page", page);
+        parameters.set_optional("sort", sort);
+        parameters.set_optional("order", order);
 
-        Self::fetch(self.build_request_url("/shodan/query", Some(parameters))).await
+        Self::fetch(self.build_request_url("/shodan/query", &parameters)?).await
     }
 
     async fn directory_query_search(
         &self,
         query: String,
-        page: Option<i32>,
-    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, ShodanError> {
-        let mut parameters = HashMap::from([(String::from("query"), query)]);
-        add_optional_parameter("page", page, &mut parameters);
+        page: Option<u32>,
+    ) -> Result<ShodanClientResponse<DirectoryQueryResponse>, Error> {
+        let mut parameters = ParameterBag::default();
+        parameters.set("query", query);
+        parameters.set_optional("page", page);
 
-        Self::fetch(self.build_request_url("/shodan/query/search", Some(parameters))).await
+        Self::fetch(self.build_request_url("/shodan/query/search", &parameters)?).await
     }
 
     async fn directory_query_tags(
         &self,
-        size: Option<i32>,
-    ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, ShodanError> {
-        let mut parameters = HashMap::new();
-        add_optional_parameter("size", size, &mut parameters);
+        size: Option<u32>,
+    ) -> Result<ShodanClientResponse<DirectoryQueryTagsResponse>, Error> {
+        let mut parameters = ParameterBag::default();
+        parameters.set_optional("size", size);
 
-        Self::fetch(self.build_request_url("/shodan/query/tags", None)).await
+        Self::fetch(self.build_request_url("/shodan/query/tags", &parameters)?).await
     }
 }
 

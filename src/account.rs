@@ -1,11 +1,10 @@
-use crate::error::ShodanError;
-use crate::ShodanClient;
+use crate::*;
 use async_trait::async_trait;
 use serde::Deserialize;
 
 #[async_trait]
 pub trait Account {
-    async fn get_account_profile(&self) -> Result<AccountProfileResponse, ShodanError>;
+    async fn get_account_profile(&self) -> Result<AccountProfileResponse, Error>;
 }
 
 #[derive(Deserialize, Debug)]
@@ -18,8 +17,8 @@ pub struct AccountProfileResponse {
 
 #[async_trait]
 impl Account for ShodanClient {
-    async fn get_account_profile(&self) -> Result<AccountProfileResponse, ShodanError> {
-        Self::fetch(self.build_request_url("/account/profile", None)).await
+    async fn get_account_profile(&self) -> Result<AccountProfileResponse, Error> {
+        Self::fetch(self.build_request_url("/account/profile", &Default::default())?).await
     }
 }
 
