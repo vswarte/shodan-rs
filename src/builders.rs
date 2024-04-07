@@ -93,10 +93,7 @@ pub mod tests {
             .build();
 
         assert!(query.contains("port:69,420"), "query was: {query}");
-        assert!(
-            query.contains("product:Apache,Ngnix"),
-            "query was: {query}"
-        );
+        assert!(query.contains("product:Apache,Ngnix"), "query was: {query}");
         assert!(query.starts_with("apache"), "query was: {query}");
     }
 
@@ -110,10 +107,7 @@ pub mod tests {
             .build();
 
         assert!(query.contains("port:69,420"), "query was: {query}");
-        assert!(
-            query.contains("product:Apache,Ngnix"),
-            "query was: {query}"
-        );
+        assert!(query.contains("product:Apache,Ngnix"), "query was: {query}");
     }
 
     #[test]
@@ -131,10 +125,7 @@ pub mod tests {
             .build();
 
         assert!(query.contains("port:69,420"), "query was: {query}");
-        assert!(
-            query.contains("product:Apache,Ngnix"),
-            "query was: {query}"
-        );
+        assert!(query.contains("product:Apache,Ngnix"), "query was: {query}");
         assert!(
             query.contains("cert.subject.cn:google.com,bing.com"),
             "query was: {query}"

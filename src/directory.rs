@@ -1,9 +1,9 @@
-use serde::Deserialize;
-use async_trait::async_trait;
-use std::collections::HashMap;
 use crate::error::ShodanError;
 use crate::response::ShodanClientResponse;
 use crate::{add_optional_parameter, ShodanClient};
+use async_trait::async_trait;
+use serde::Deserialize;
+use std::collections::HashMap;
 
 #[async_trait]
 pub trait Directory {

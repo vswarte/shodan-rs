@@ -1,7 +1,7 @@
-use async_trait::async_trait;
 use crate::error::ShodanError;
 use crate::response::ShodanClientResponse;
 use crate::ShodanClient;
+use async_trait::async_trait;
 use std::collections::HashMap;
 
 #[async_trait]

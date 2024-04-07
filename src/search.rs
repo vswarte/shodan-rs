@@ -1,8 +1,8 @@
-use serde::Deserialize;
-use async_trait::async_trait;
-use std::collections::HashMap;
 use crate::error::ShodanError;
 use crate::{add_optional_parameter, ShodanClient};
+use async_trait::async_trait;
+use serde::Deserialize;
+use std::collections::HashMap;
 
 #[async_trait]
 pub trait Search {
@@ -350,7 +350,8 @@ impl Search for ShodanClient {
         add_optional_parameter("history", history, &mut parameters);
         add_optional_parameter("minifi", minifi, &mut parameters);
 
-        Self::fetch(self.build_request_url(format!("/shodan/host/{ip}").as_str(), Some(parameters))).await
+        Self::fetch(self.build_request_url(format!("/shodan/host/{ip}").as_str(), Some(parameters)))
+            .await
     }
 
     async fn host_search(
@@ -397,8 +398,8 @@ impl Search for ShodanClient {
 #[cfg(test)]
 pub mod tests {
     use crate::search::*;
-    use crate::ShodanClient;
     use crate::tests::get_test_api_key;
+    use crate::ShodanClient;
 
     #[tokio::test]
     async fn can_get_google_host_ip() {
@@ -442,7 +443,9 @@ pub mod tests {
     #[tokio::test]
     async fn can_get_google_search() {
         let client = ShodanClient::new(get_test_api_key());
-        let response = client.host_search(String::from("google"), None, None, None).await;
+        let response = client
+            .host_search(String::from("google"), None, None, None)
+            .await;
 
         match response {
             Ok(r) => {

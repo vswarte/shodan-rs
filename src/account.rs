@@ -1,7 +1,7 @@
-use crate::ShodanClient;
-use serde::Deserialize;
-use async_trait::async_trait;
 use crate::error::ShodanError;
+use crate::ShodanClient;
+use async_trait::async_trait;
+use serde::Deserialize;
 
 #[async_trait]
 pub trait Account {
@@ -26,8 +26,8 @@ impl Account for ShodanClient {
 #[cfg(test)]
 pub mod tests {
     use crate::account::Account;
-    use crate::ShodanClient;
     use crate::tests::get_test_api_key;
+    use crate::ShodanClient;
 
     #[tokio::test]
     async fn can_get_account_profile() {

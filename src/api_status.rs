@@ -1,7 +1,7 @@
-use crate::ShodanClient;
-use serde::Deserialize;
-use async_trait::async_trait;
 use crate::error::ShodanError;
+use crate::ShodanClient;
+use async_trait::async_trait;
+use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
 pub struct ApiInfoResponse {

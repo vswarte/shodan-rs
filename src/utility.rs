@@ -1,6 +1,6 @@
+use crate::error::ShodanError;
 use crate::ShodanClient;
 use async_trait::async_trait;
-use crate::error::ShodanError;
 use std::collections::HashMap;
 
 #[async_trait]
@@ -22,9 +22,9 @@ impl Utility for ShodanClient {
 
 #[cfg(test)]
 pub mod tests {
-    use crate::ShodanClient;
-    use crate::utility::Utility;
     use crate::tests::get_test_api_key;
+    use crate::utility::Utility;
+    use crate::ShodanClient;
 
     #[tokio::test]
     async fn can_get_my_ip() {
