@@ -13,14 +13,14 @@ You can review the support table below.
 First off you'll want to create a `ShodanClient`. This requires an API key from [shodan.io](https://shodan.io).
 Once you're acquired your key you can spawn a client like so:
 ```rust
-use shodan_client::ShodanClient;
+use shodan_client::*;
 
 let client = ShodanClient::new(String::from("API-KEY-GOES-HERE"));
 ```
 
 You can then make calls to the shodan API. As an example we can fetch our shodan account details:
 ```rust
-use shodan_client::account::Account; // Include the trait the adds the account functionality
+use shodan_client::*; // Include the trait the adds the account functionality
 
 let account_details = client.get_account_profile().await.unwrap();
 println!("Account Details: {:?}", account_details);

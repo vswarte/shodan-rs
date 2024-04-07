@@ -31,6 +31,7 @@ impl SearchQueryBuilder {
         if !self.query.is_empty() {
             query.push(self.query);
         }
+
         for (filter, values) in self.filters {
             query.push(format!("{}:{}", filter, values.join(",")));
         }
