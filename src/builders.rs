@@ -11,10 +11,7 @@ impl SslFilterBuilder {
     }
 
     pub fn cert_subject_cn(mut self, value: impl ToString) -> Self {
-        let values = self
-            .filters
-            .entry("cert.subject.cn".into())
-            .or_insert(Default::default());
+        let values = self.filters.entry("cert.subject.cn".into()).or_default();
 
         values.push(value.to_string());
 
@@ -48,10 +45,7 @@ impl SearchQueryBuilder {
     }
 
     pub fn port(mut self, value: impl ToString) -> Self {
-        let values = self
-            .filters
-            .entry("port".into())
-            .or_insert(Default::default());
+        let values = self.filters.entry("port".into()).or_default();
 
         values.push(value.to_string());
 
@@ -59,10 +53,7 @@ impl SearchQueryBuilder {
     }
 
     pub fn product(mut self, filter: impl ToString) -> Self {
-        let values = self
-            .filters
-            .entry("product".into())
-            .or_insert(Default::default());
+        let values = self.filters.entry("product".into()).or_default();
 
         values.push(filter.to_string());
 
@@ -79,8 +70,8 @@ impl SearchQueryBuilder {
 }
 
 #[cfg(test)]
-pub mod tests {
-    use crate::builders::SearchQueryBuilder;
+mod tests {
+    use crate::*;
 
     #[test]
     fn can_build_query() {

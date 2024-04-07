@@ -24,10 +24,9 @@ impl Account for ShodanClient {
 }
 
 #[cfg(test)]
-pub mod tests {
-    use crate::account::Account;
+mod tests {
     use crate::tests::get_test_api_key;
-    use crate::ShodanClient;
+    use crate::*;
 
     #[tokio::test]
     async fn can_get_account_profile() {

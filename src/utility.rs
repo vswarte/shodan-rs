@@ -21,10 +21,9 @@ impl Utility for ShodanClient {
 }
 
 #[cfg(test)]
-pub mod tests {
+mod tests {
     use crate::tests::get_test_api_key;
-    use crate::utility::Utility;
-    use crate::ShodanClient;
+    use crate::*;
 
     #[tokio::test]
     async fn can_get_my_ip() {

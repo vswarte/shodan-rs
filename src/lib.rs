@@ -1,20 +1,29 @@
-use crate::error::ShodanError;
 use crate::error::ShodanError::ShodanClientError;
-use crate::response::ShodanClientResponse;
 use serde::Deserialize;
 use std::collections::HashMap;
 use url::Url;
 
-pub mod account;
-pub mod api_status;
-pub mod builders;
-pub mod directory;
-pub mod dns;
-pub mod error;
-pub mod response;
-pub mod scanning;
-pub mod search;
-pub mod utility;
+mod account;
+mod api_status;
+mod builders;
+mod directory;
+mod dns;
+mod error;
+mod response;
+mod scanning;
+mod search;
+mod utility;
+
+pub use account::*;
+pub use api_status::*;
+pub use builders::*;
+pub use directory::*;
+pub use dns::*;
+pub use error::*;
+pub use response::*;
+pub use scanning::*;
+pub use search::*;
+pub use utility::*;
 
 const BASE_API_URL: &str = "https://api.shodan.io";
 
@@ -39,8 +48,7 @@ impl ShodanClient {
             .append_pair("key", self.api_key.as_str());
 
         if let Some(url_parameters) = parameters {
-            url.query_pairs_mut()
-                .extend_pairs(url_parameters.into_iter());
+            url.query_pairs_mut().extend_pairs(url_parameters);
         }
 
         url.to_string()

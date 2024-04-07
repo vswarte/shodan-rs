@@ -1,5 +1,3 @@
-use crate::error::ShodanError::*;
-
 #[derive(Debug)]
 pub enum ShodanError {
     ShodanClientError(String),
@@ -8,6 +6,6 @@ pub enum ShodanError {
 
 impl From<reqwest::Error> for ShodanError {
     fn from(e: reqwest::Error) -> Self {
-        ReqwestError(e)
+        ShodanError::ReqwestError(e)
     }
 }
