@@ -19,11 +19,8 @@ pub trait Search {
         minifi: Option<bool>,
     ) -> Result<SearchResult, Error>;
 
-    async fn host_count(
-        &self,
-        query: String,
-        facets: Option<&str>,
-    ) -> Result<CountResponse, Error>;
+    async fn host_count(&self, query: String, facets: Option<&str>)
+        -> Result<CountResponse, Error>;
 
     async fn host_facets(&self) -> Result<Vec<String>, Error>;
 
@@ -381,7 +378,8 @@ impl Search for ShodanClient {
     }
 
     async fn host_facets(&self) -> Result<Vec<String>, Error> {
-        Self::fetch(self.build_request_url("/shodan/host/search/facets", &Default::default())?).await
+        Self::fetch(self.build_request_url("/shodan/host/search/facets", &Default::default())?)
+            .await
     }
 
     async fn host_filters(&self) -> Result<Vec<String>, Error> {

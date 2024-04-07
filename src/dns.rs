@@ -35,10 +35,7 @@ pub trait Dns {
         hostnames: Vec<String>,
     ) -> Result<HashMap<String, Option<String>>, Error>;
 
-    async fn dns_reverse(
-        &self,
-        ips: Vec<String>,
-    ) -> Result<HashMap<String, Vec<String>>, Error>;
+    async fn dns_reverse(&self, ips: Vec<String>) -> Result<HashMap<String, Vec<String>>, Error>;
 }
 
 #[async_trait]
@@ -69,10 +66,7 @@ impl Dns for ShodanClient {
         Self::fetch(self.build_request_url("/dns/resolve", &parameters)?).await
     }
 
-    async fn dns_reverse(
-        &self,
-        ips: Vec<String>,
-    ) -> Result<HashMap<String, Vec<String>>, Error> {
+    async fn dns_reverse(&self, ips: Vec<String>) -> Result<HashMap<String, Vec<String>>, Error> {
         let mut parameters = ParameterBag::default();
         parameters.set("ips", ips.join(","));
 

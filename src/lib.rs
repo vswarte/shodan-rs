@@ -35,7 +35,11 @@ impl ShodanClient {
         Self { api_key }
     }
 
-    fn build_request_url(&self, endpoint: &str, parameters: &ParameterBag) -> Result<String, error::Error> {
+    fn build_request_url(
+        &self,
+        endpoint: &str,
+        parameters: &ParameterBag,
+    ) -> Result<String, error::Error> {
         let mut url = Url::parse(BASE_API_URL)?;
         url.set_path(endpoint);
 
@@ -58,7 +62,7 @@ impl ShodanClient {
         match response {
             ShodanClientResponse::Error(e) => {
                 Err(error::Error::Shodan(format!("Error response: {}", e.error)))
-            },
+            }
             ShodanClientResponse::Response(r) => Ok(r),
         }
     }
