@@ -1,4 +1,4 @@
-# Shodan-client [![Build Status]][actions] [![Latest Version]][crates.io] [![Docs Status]][docs] [![License Status]][license]
+# Rust Shodan API Client [![Build Status]][actions] [![Latest Version]][crates.io] [![Docs Status]][docs] [![License Status]][license]
 
 [Build Status]: https://img.shields.io/github/actions/workflow/status/vswarte/shodan-rs/rust.yml?branch=main
 [actions]: https://github.com/vswarte/shodan-rs/actions?query=branch%3Amain
