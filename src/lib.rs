@@ -29,6 +29,7 @@ pub enum Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
+#[derive(Clone)]
 pub struct ShodanClient {
     api_key: String,
 }
