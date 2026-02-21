@@ -26,6 +26,7 @@ pub use utility::*;
 
 const BASE_API_URL: &str = "https://api.shodan.io";
 
+#[derive(Clone)]
 pub struct ShodanClient {
     api_key: String,
 }
