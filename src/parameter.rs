@@ -1,4 +1,4 @@
-use std::collections::{hash_map, HashMap};
+use std::collections::{HashMap, hash_map};
 
 #[derive(Default)]
 pub struct ParameterBag(HashMap<String, String>);
@@ -12,11 +12,7 @@ impl ParameterBag {
         self.0.insert(key.as_ref().to_string(), value.into());
     }
 
-    pub fn set_optional(
-        &mut self,
-        key: impl AsRef<str>,
-        value: Option<impl Into<ParameterValue>>,
-    ) {
+    pub fn set_optional(&mut self, key: impl AsRef<str>, value: Option<impl Into<ParameterValue>>) {
         if let Some(value) = value {
             self.set(key.as_ref(), value.into().0);
         }
