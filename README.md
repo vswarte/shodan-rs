@@ -82,7 +82,7 @@ Emptyness indicates no support yet for the endpoint.
 
 ## Tests
 
-The client includes a set of tests that call out to the actual shodan API (for the time being).
+The client includes a set of tests that call out to the actual shodan API.
 
 ### Example invocation
 ```shell
